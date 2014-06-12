@@ -43,6 +43,7 @@ class UsersController extends AppController {
 		$salesByUsersTest = array();
 		$childrenIds = Hash::extract($this->User->children($this->objLoggedUser->getID(),true), '{n}.User.id');
 		$childrenIds[] = $this->objLoggedUser->getID();
+		if ($this->objLoggedUser->getAttr('role_id') == '9' ) $childrenIds[] = '2';
 		foreach ($childrenIds as $key => $child) {
 			$objChild = $this->User->findById($child);
 			$salesByUsersTest[$key]['User'] = $objChild->data['User'];
