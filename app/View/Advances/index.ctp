@@ -1,0 +1,55 @@
+<div class="advances index">
+	<h2><?php echo __('Advances'); ?>
+	<?php
+		echo $this->Html->link('New Advance',array('action'=>'add'),array('class'=>'btn btn-lg btn-info pull-right','style'=>'color: black; font-weight: bold'));
+	?>
+	</h2>
+	<table class="table table-bordered table-hover">
+	<tr>
+			<th><?php echo $this->Paginator->sort('id'); ?></th>
+			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('sale_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('value'); ?></th>
+			<th><?php echo $this->Paginator->sort('advdate'); ?></th>
+			<th><?php echo $this->Paginator->sort('received'); ?></th>
+			<th><?php echo $this->Paginator->sort('bank'); ?></th>
+			<th><?php echo $this->Paginator->sort('chknumber'); ?></th>
+			<th><?php echo $this->Paginator->sort('created'); ?></th>
+			<th class="actions"><?php echo __('Actions'); ?></th>
+	</tr>
+	<?php foreach ($advances as $advance): ?>
+	<tr>
+		<td><?php echo h($advance['Advance']['id']); ?>&nbsp;</td>
+		<td>
+			<?php echo $this->Html->link($advance['User']['username'], array('controller' => 'users', 'action' => 'view', $advance['User']['id'])); ?>
+		</td>
+		<td>
+			<?php echo $this->Html->link($advance['Sale']['id'], array('controller' => 'sales', 'action' => 'view', $advance['Sale']['id'])); ?>
+		</td>
+		<td><?php echo h($advance['Advance']['value']); ?>&nbsp;</td>
+		<td><?php echo h($advance['Advance']['advdate']); ?>&nbsp;</td>
+		<td><?php echo h($advance['Advance']['received']); ?>&nbsp;</td>
+		<td><?php echo h($advance['Advance']['bank']); ?>&nbsp;</td>
+		<td><?php echo h($advance['Advance']['chknumber']); ?>&nbsp;</td>
+		<td><?php echo h($advance['Advance']['created']); ?>&nbsp;</td>
+		<td class="actions">
+			<?php echo $this->Html->link(__('View'), array('action' => 'view', $advance['Advance']['id']), array('class'=>'btn btn-sm btn-success')); ?>
+			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $advance['Advance']['id']), array('class'=>'btn btn-sm btn-primary')); ?>
+		</td>
+	</tr>
+<?php endforeach; ?>
+	</table>
+	<p>
+	<?php
+	echo $this->Paginator->counter(array(
+	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
+	));
+	?>	</p>
+	<div class="paging">
+	<?php
+		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
+		echo $this->Paginator->numbers(array('separator' => ''));
+		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
+	?>
+	</div>
+</div>

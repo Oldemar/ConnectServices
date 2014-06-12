@@ -1,0 +1,37 @@
+  .event {
+    color: #fff;
+    width: 100%;
+    cursor: pointer;
+    z-index: 3;
+    border-radius: 7px;
+    border: 1px solid #666;
+    -webkit-box-shadow: 10px 10px 22px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 22px 0px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 22px 0px rgba(0,0,0,0.75);
+  }
+  .eventInfoIcon{
+    padding: 0 6px;
+    border-left: 1px solid #fff;
+  }
+  #agenda {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden; 
+  }
+ .agendaTitle {
+    font-weight: bold;
+    font-size: 16px;
+    background-color: #ccc;
+  }
+  .eventTitle {
+    font-weight: bold;
+    border-bottom: 1px solid #fff;
+    padding-left: 10px;
+    width: 100%
+  }
+  .timeColumn {
+     border-right:1px dotted #ccc;
+  }
+  .hoverDropppable {
+    background-color: #eee;
+  }

@@ -1,0 +1,86 @@
+<div class="advances form">
+<?php echo $this->Form->create('Advance'); ?>
+	<fieldset>
+		<legend><?php echo __('Add Advance'); ?></legend>
+	<?php
+		echo $this->Form->input('user_id', array(
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
+	?>
+	<div style="clear: both"></div>
+	<?php
+
+		echo $this->Form->input('sale_id', array(
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
+	?>
+	<div style="clear: both"></div>
+	<?php
+
+		echo $this->Form->input('value', array(
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
+	?>
+	<div style="clear: both"></div>
+	<?php
+
+		echo $this->Form->input('advdate', array(
+			'type'=>'text',
+			'id'=>'advDate',
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
+		?>
+	<div style="clear: both"></div>
+	<?php
+
+		echo $this->Form->input('bank', array(
+		'class'=>'form-control pull-left',
+		'style'=>'width: 250px',
+		'label'=>array(
+			'class'=>'pull-left',
+			'style'=>'width: 120px'
+			)));
+	?>
+	<div style="clear: both"></div>
+	<?php
+
+		echo $this->Form->input('chknumber', array(
+		'class'=>'form-control pull-left',
+		'style'=>'width: 250px',
+		'label'=>array(
+			'class'=>'pull-left',
+			'style'=>'width: 120px'
+			)));
+	?>
+	<div style="clear: both"></div>
+	<div class="row">
+		<div class="col-lg-12">
+			<?php 
+				echo $this->Form->button('Save', array(
+					'type'=>'submit','class'=>'pull-right btn btn-lg btn-primary')); 
+				echo $this->Form->end(); ?>
+			<div style="clear: both"></div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$( "#advDate" ).datepicker({
+		dateformat: 'yy-mm-dd'
+	});
+</script>

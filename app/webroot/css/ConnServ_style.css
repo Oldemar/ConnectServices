@@ -1,0 +1,75 @@
+#container {
+  margin-top: 60px;
+}
+  .event {
+    color: #fff;
+    width: 100%;
+    cursor: pointer;
+    z-index: 3;
+    border-radius: 7px;
+    border: 1px solid #666;
+    -webkit-box-shadow: 10px 10px 22px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 22px 0px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 22px 0px rgba(0,0,0,0.75);
+  }
+  .eventInfoIcon{
+    padding: 0 6px;
+    border-left: 1px solid #fff;
+  }
+  #agenda {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden; 
+  }
+ .agendaTitle {
+    font-weight: bold;
+    font-size: 16px;
+    background-color: #ccc;
+  }
+  .eventTitle {
+    font-weight: bold;
+    border-bottom: 1px solid #fff;
+    padding-left: 10px;
+    width: 100%
+  }
+  .timeColumn {
+     border-right:1px dotted #ccc;
+  }
+  .hoverDropppable {
+    background-color: #eee;
+  }
+  
+  .form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
