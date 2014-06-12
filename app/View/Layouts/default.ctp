@@ -114,7 +114,7 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 						</li>
 						<?
 						}
-						if (in_array(Authcomponent::User('role_id'), array('1','2','4','8','9'))) {
+						if (in_array(Authcomponent::User('role_id'), array('1','2','4','8'))) {
 						?>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Advances<b class="caret"></b></a>
