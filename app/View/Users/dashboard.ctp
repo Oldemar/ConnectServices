@@ -1,7 +1,12 @@
 <div class="row">
+	<?
+	if ($objLoggedUser->getAttr('role_id') != '9')
+	{
+	?>
 	<div class=" well col-lg-6">
 		<div id="salesChart"></div>
 	</div>
+	<? } ?>
 	<div class="well col-lg-6">
 		<div id="userAgenda">
 			<h4 style="border-bottom: 1px dotted #666">Agenda</h4>
@@ -34,8 +39,13 @@
 			?>
 		</div>
 	</div>
+	<?
+	if ($objLoggedUser->getAttr('role_id') != '9')
+	{
+	?>
 </div>
 <div class="row">
+	<? } ?>
 	<div class="well col-lg-6">
 		<div id="lastSale">
 			<h4>Latest Sales</h4>
@@ -63,12 +73,18 @@
 			?>
 		</div>
 	</div>
+	<?
+	if ($objLoggedUser->getAttr('role_id') != '9')
+	{
+	?>
+	</div>
 	<div class="well col-lg-6">
 		<?
 		echo 'Top Leader => <b>'.$objLoggedUser->getUsername($myTopLeader).'</b><hr>';
 		echo 'My Team Leaser => <b>'.$objLoggedUser->getUsername($myLeader).'</b>';
 		?>
 	</div>
+	<? } ?>
 </div>
 <script type="text/javascript">
   google.load("visualization", "1", {packages:["corechart"]});
