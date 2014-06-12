@@ -34,7 +34,7 @@ class Sale extends AppModel {
 		)
 	);
 
-	public function beforeSave()
+	public function beforeSave($options = array())
 	{
 		if (isset($this->data['Sale']['instalation']))
 		{
@@ -46,7 +46,7 @@ class Sale extends AppModel {
 		}
 	}
 
-	public function afterSave($created) {
+	public function afterSave($created, $options = array()) {
 
 		$arrDateFactors = array('0','2','15','60');
 		$arrTtile = array('VOID','Greetings ','Follow Up (15 days) - ','60 days Follow Up - ');

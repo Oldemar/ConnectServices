@@ -32,7 +32,7 @@ class Saving extends AppModel {
 			'order' => ''
 		)
 	);
-	public function afterSave($created)
+	public function afterSave($created, $options = array())
 	{
 		if ($created) 
 		{

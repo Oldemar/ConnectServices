@@ -203,7 +203,7 @@ public $actsAs = array('Tree','Containable');
 	/**
 	 * afterSave method
 	 */
-		public function afterSave() {
+		public function afterSave($created, $options = array()) {
 	    if (isset($this->data[$this->alias]['id'])) {
 	        $this->saveField('topleader', $this->getTopleader($this->data[$this->alias]['id']), array('callbacks'=>false));
 	        return true;

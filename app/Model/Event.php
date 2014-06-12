@@ -38,12 +38,6 @@ class Event extends AppModel {
 		)
 	);
 
-	function beforeSave($created) {
-//		$this->data['Event']['user_id'] = $this->data['Event']['User']['id'];
-		//echo '<pre>'.print_r($this->data['Event'],true).'</pre>';
-		//die();
-		return true;
-	}
 	public function childEvents($ids)
 	{
 		return 
