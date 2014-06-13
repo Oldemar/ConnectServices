@@ -141,7 +141,8 @@ class UsersController extends AppController {
 		$roles = $this->User->Role->find('list');
 		$carriers = $this->User->Carrier->find('list');
 		$parents = $this->User->ParentUser->find('list');
-		$this->set(compact('roles','carriers','parents'));
+		$leaders = $this->User->find('list', array('conditions'=>array('User.role_id'=>array('2','4'))));
+		$this->set(compact('roles','carriers','parents','leaders'));
 	}
 
 /**
