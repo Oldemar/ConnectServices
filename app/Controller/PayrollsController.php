@@ -227,6 +227,7 @@ class PayrollsController extends AppController {
 				'AND'=>array(
 					'Sale.comissioned'=> false,
 					'Sale.installed'=>true,
+					'Sale.advanced'=>false,
 					'User.region'=>$region,
 					'Sale.sales_date >='=>$start,
 					'Sale.sales_date <='=>$end
