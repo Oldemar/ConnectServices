@@ -195,9 +195,9 @@ class SalesController extends AppController {
 				$this->Session->setFlash(__('The sale could not be saved. Please, try again.'));
 			}
 		}
-		$users = $this->Sale->User->find('list',array(
-			'conditions'=> array(
-				'User.role_id !='=>array('1','2','8','9'))));
+		$users = $this->Sale->User->find('list', array(
+			'conditions'=>array(
+				'User.role_id !='=>array('1','2','7','8','9'))));
 		$customers = $this->Sale->Customer->find('list');
 		$carriers = $this->Sale->Customer->Carrier->find('list');
 		$this->set(compact('users', 'customers','carriers'));
@@ -225,7 +225,9 @@ class SalesController extends AppController {
 			$options = array('conditions' => array('Sale.' . $this->Sale->primaryKey => $id));
 			$this->request->data = $this->Sale->find('first', $options);
 		}
-		$users = $this->Sale->User->find('list');
+		$users = $this->Sale->User->find('list', array(
+			'conditions'=>array(
+				'User.role_id !='=>array('1','2','7','8','9'))));
 		$customers = $this->Sale->Customer->find('list');
 		$this->set(compact('users', 'customers'));
 	}
