@@ -41,9 +41,9 @@ class UsersController extends AppController {
 
 		$this->loadModel('Sale');
 		$salesByUsersTest = array();
-		$childrenIds = Hash::extract($this->User->children($this->objLoggedUser->getID(),true), '{n}.User.id');
+		$parentForChildrenIds = $this->objLoggedUser->getAttr('role_id') == '9' ? $this->objLoggedUser->getAttr('topleader') : $this->objLoggedUser->getID();
+		$childrenIds = Hash::extract($this->User->children($parentForChildrenIds,true), '{n}.User.id');
 		$childrenIds[] = $this->objLoggedUser->getID();
-		if ($this->objLoggedUser->getAttr('role_id') == '9' ) $childrenIds[] = '2';
 		foreach ($childrenIds as $key => $child) {
 			$objChild = $this->User->findById($child);
 			$salesByUsersTest[$key]['User'] = $objChild->data['User'];
@@ -53,9 +53,6 @@ class UsersController extends AppController {
 			$salesByUsersTest[$key]['Events'] = $objChild->Event->childEvents($salesByUsersTest[$key]['Children']);
 		}
 
-//		echo '<pre>'.print_r($childrenIds,true).'</pre>';
-//		echo '<pre>'.print_r($salesByUsersTest,true).'</pre>';
-//		die();
 		$this->set('latestSales', $this->Sale->find('all', array(
 			'conditions'=> array(
 				'Sale.user_id'=>$childrenIds

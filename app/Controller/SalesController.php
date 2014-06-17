@@ -46,7 +46,7 @@ class SalesController extends AppController {
  * @return void
  */
 	public function allsales() {
-		if (!in_array($this->objLoggedUser->getAttr('role_id'), array('1', '2', '8', '9')))
+		if (!in_array($this->objLoggedUser->getAttr('role_id'), array('1', '2', '8')))
 		{
 			if ( $this->objLoggedUser->getAttr('role_id') == '5' ) 
 			{
@@ -55,6 +55,10 @@ class SalesController extends AppController {
 			if ($this->objLoggedUser->getAttr('role_id') == '4')
 			{
 				$childrenIds = Hash::extract($this->User->children($this->objLoggedUser->getID()), '{n}.User.id');
+			}
+			if ($this->objLoggedUser->getAttr('role_id') == '9')
+			{
+				$childrenIds = $this->objLoggedUser->getAttr('topleader');
 			}
 
 			$this->Paginator->settings = array(
