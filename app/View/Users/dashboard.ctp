@@ -1,6 +1,6 @@
 <div class="row">
 	<?
-	if ($objLoggedUser->getAttr('role_id') != '9')
+	if (!in_array($objLoggedUser->getAttr('role_id'), array('9', '7')))
 	{
 	?>
 	<div class=" well col-lg-6">
@@ -40,12 +40,16 @@
 		</div>
 	</div>
 	<?
-	if ($objLoggedUser->getAttr('role_id') != '9')
+	if (!in_array($objLoggedUser->getAttr('role_id'), array('9', '7')))
 	{
 	?>
 </div>
 <div class="row">
-	<? } ?>
+	<? 
+	} 
+	if ($objLoggedUser->getAttr('role_id') != '7') 
+	{
+	?>
 	<div class="well col-lg-6">
 		<div id="lastSale">
 			<h4>Latest Sales</h4>
@@ -74,7 +78,8 @@
 		</div>
 	</div>
 	<?
-	if ($objLoggedUser->getAttr('role_id') != '9')
+	}
+	if (!in_array($objLoggedUser->getAttr('role_id'), array('9', '7')))
 	{
 	?>
 	</div>

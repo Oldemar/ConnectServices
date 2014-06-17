@@ -194,8 +194,8 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 							</ul>
 						</li>
 						<?
-							}
-						?>
+						}
+						if (Authcomponent::User('role_id') !='7') {						?>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								Sales
@@ -259,6 +259,9 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 								</li>
 							</ul>
 						</li>
+						<?
+						}
+						?>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								Agenda<b class="caret"></b>
