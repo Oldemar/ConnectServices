@@ -72,7 +72,9 @@ class CustomersController extends AppController {
 				$this->Session->setFlash(__('The customer could not be saved. Please, try again.'));
 			}
 		}
-		$users = $this->Customer->User->find('list');
+		$users = $this->Customer->User->find('list', array(
+			'conditions'=>array(
+				'User.role_id !='=>array('1','2','7','8','9'))));
 		$carriers = $this->Customer->Carrier->find('list');
 		$this->set(compact('users', 'carriers'));
 	}
@@ -99,7 +101,9 @@ class CustomersController extends AppController {
 			$options = array('conditions' => array('Customer.' . $this->Customer->primaryKey => $id));
 			$this->request->data = $this->Customer->find('first', $options);
 		}
-		$users = $this->Customer->User->find('list');
+		$users = $this->Customer->User->find('list', array(
+			'conditions'=>array(
+				'User.role_id !='=>array('1','2','7','8','9'))));
 		$carriers = $this->Customer->Carrier->find('list');
 		$this->set(compact('users', 'carriers'));
 	}
