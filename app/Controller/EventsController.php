@@ -52,10 +52,13 @@ class EventsController extends AppController {
 		$this->set('eventByUser',$eventByUser);
 		$this->set('users',$this->Event->User->find('list',array('conditions'=>array('User.role_id'=>'3'))));
 		$this->set('eventTypes',$this->Event->EventType->find('list'));
+		$this->set('users',$this->Event->User->find('list',array('conditions'=>array('User.id'=>$childrenIds))));
 		$this->set('eventDate', $date);
 	}
 
     function weeklyAgenda($date) {
+
+    	$date = date('Y-m-d', strtotime('last monday', strtotime($date."+1 day")));
      	$this->loadModel('User');
      	if (!in_array($this->objLoggedUser->getAttr('role_id'), array('6', '7')))
      	{
@@ -87,6 +90,59 @@ class EventsController extends AppController {
 							)
 						);
     		}
+     	}
+
+   		$eventsByDay1 = array();
+
+    	for ($i=0;$i<7;$i++)
+     	{
+  			for ($t=16;$t<45;$t++)
+     		{
+		 		$eventsByDay1[$i][$t] = $this->Event->find('all', array(
+						'conditions'=> array(
+							'Event.user_id'=>$userIds,
+							'Event.start '=>date('Y-m-d H:i:s',strtotime($date . "+$i days".gmdate('h:i a', $t*1800))))
+							)
+						);
+    		}
+     	}
+
+
+		$this->set('eventsByDay1',$eventsByDay1);
+		$this->set('eventsByDay',$eventsByDay);
+		$this->set('userIds',$userIds);
+		$this->set('date',$date);
+	}
+
+	function dairyAgendaNew($date) {
+     	$this->loadModel('User');
+     	if (!in_array($this->objLoggedUser->getAttr('role_id'), array('6', '7')))
+     	{
+     		if ($this->objLoggedUser->getAttr('role_id') == '9') {
+	     		$userIds =  Hash::extract($this->User->children($this->objLoggedUser->getAttr('topleader')), '{n}.User.id');
+	     		$userIds[] = $this->objLoggedUser->getID();
+     		}
+     		else
+     		{
+	     		$userIds =  Hash::extract($this->User->children($this->objLoggedUser->getID()), '{n}.User.id');
+	     		$userIds[] = $this->objLoggedUser->getID();
+     		}
+     	}
+     	else
+     	{
+     		$userIds = $this->objLoggedUser->getID();
+     	}
+
+    	$eventsByDay = array();
+
+   		for ($t=16;$t<45;$t++)
+    	{
+	 		$eventsByDay[$t] = $this->Event->find('all', array(
+					'conditions'=> array(
+						'Event.user_id'=>$userIds,
+						'Event.start '=>date('Y-m-d H:i:s',strtotime($date.gmdate('h:i a', $t*1800))))
+						)
+					);
      	}
 
    		$eventsByDay1 = array();

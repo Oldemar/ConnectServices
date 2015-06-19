@@ -23,6 +23,8 @@ class ServicesController extends AppController {
 	public function index() {
 		$this->Service->recursive = 0;
 		$this->set('services', $this->Paginator->paginate());
+		$regions = $this->Service->Region->find('list');
+		$this->set(compact('regions'));
 	}
 
 /**
@@ -55,6 +57,8 @@ class ServicesController extends AppController {
 				$this->Session->setFlash(__('The service could not be saved. Please, try again.'));
 			}
 		}
+		$regions = $this->Service->Region->find('list');
+		$this->set(compact('regions'));
 	}
 
 /**
@@ -79,6 +83,8 @@ class ServicesController extends AppController {
 			$options = array('conditions' => array('Service.' . $this->Service->primaryKey => $id));
 			$this->request->data = $this->Service->find('first', $options);
 		}
+		$regions = $this->Service->Region->find('list');
+		$this->set(compact('regions'));
 	}
 
 /**

@@ -16,7 +16,7 @@
 			{
 			?>
 			<th class="text-center" style="width: 13.25%">
-				<? 
+				<?php
 					echo CakeTime::format(date('Y-m-d',strtotime($date. "+$i days")), '%B %e');
 				?>
 			</th>

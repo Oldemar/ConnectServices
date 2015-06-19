@@ -1,22 +1,65 @@
-<div class="services form">
-<?php echo $this->Form->create('Service'); ?>
-	<fieldset>
-		<legend><?php echo __('Add Service'); ?></legend>
+<div class="well">
+<?php echo $this->Form2->create('Service'); ?>
+	<h2><?php echo __('Add Service'); ?></h2>
 	<?php
-		echo $this->Form->input('group');
-		echo $this->Form->input('name');
-		echo $this->Form->input('description');
-		echo $this->Form->input('price');
+		echo $this->Form2->input('region_id', array(
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'required'=>'required',
+			'placeholder'=>'This field is required',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 100px'
+				)));
 	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-
-		<li><?php echo $this->Html->link(__('List Services'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Saleservices'), array('controller' => 'saleservices', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Saleservice'), array('controller' => 'saleservices', 'action' => 'add')); ?> </li>
-	</ul>
+	<div style="clear: both"></div>
+	<?php
+		echo $this->Form2->input('group', array(
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'required'=>'required',
+			'placeholder'=>'This field is required',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 100px'
+				)));
+	?>
+	<div style="clear: both"></div>
+	<?php
+		echo $this->Form2->input('name', array(
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'required'=>'required',
+			'placeholder'=>'This field is required',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 100px'
+				)));
+	?>
+	<div style="clear: both"></div>
+	<?php
+		echo $this->Form2->input('description', array(
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'required'=>'required',
+			'placeholder'=>'This field is required',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 100px'
+				)));
+	?>
+	<div style="clear: both"></div>
+	<?php
+		echo $this->Form2->input('sfu_in', array(
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'required'=>'required',
+			'placeholder'=>'This field is required',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 100px'
+				)));
+	?>
+	<div style="clear: both"></div>
+<?php echo $this->Form2->end(__('Submit')); ?>
 </div>

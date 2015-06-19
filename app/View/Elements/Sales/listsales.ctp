@@ -5,7 +5,7 @@
 			<th><?php echo $this->Paginator->sort('tv'); ?></th>
 			<th><?php echo $this->Paginator->sort('internet'); ?></th>
 			<th><?php echo $this->Paginator->sort('phone'); ?></th>
-			<th><?php echo $this->Paginator->sort('homeSecurity'); ?></th>
+			<th><?php echo $this->Paginator->sort('xfinity_home'); ?></th>
 			<th><?php echo $this->Paginator->sort('sales_date'); ?></th>
 			<th><?php echo $this->Paginator->sort('instalation'); ?></th>
 			<th><?php echo __('Installed'); ?></th>
@@ -21,7 +21,7 @@
 		<td><?php echo h($sale['Sale']['tv']); ?>&nbsp;</td>
 		<td><?php echo h($sale['Sale']['internet']); ?>&nbsp;</td>
 		<td><?php echo h($sale['Sale']['phone']); ?>&nbsp;</td>
-		<td><?php echo h($sale['Sale']['homeSecurity']); ?>&nbsp;</td>
+		<td><?php echo h($sale['Sale']['xfinity_home']); ?>&nbsp;</td>
 		<td><?php echo CakeTime::format($sale['Sale']['sales_date'], '%B %e, %Y '); ?>&nbsp;</td>
 		<td><?php if ($sale['Sale']['instalation'] != '0000-00-00 00:00:00') echo CakeTime::format($sale['Sale']['instalation'], '%B %e, %Y '); ?>&nbsp;</td>
 		<td>
@@ -42,14 +42,15 @@
 			<script type="text/javascript">
 				$('.btnNo').click(function(e){
 				$.ajax({
-					url: "<? echo Router::url(array('controller'=>'sales','action'=>'updateInstalled')); ?>",
+					url: "<?php echo Router::url(array('controller'=>'sales','action'=>'updateInstalled')); ?>",
 					type : "post",
 					dataType: "Json",
 					data: { 
-						region: $('#region').val(), 
+						regionID: $('#regionID').val(), 
 						start: $('#startDate').val(), 
 						end: $('#endDate').val(),
 						sid: $(this).attr('data-sid'),
+						userID: $('#userID').val(),
 						installed: '1'
 					}
 				}).done(function(html){
@@ -61,14 +62,15 @@
 				});
 				$('.btnYes').click(function(e){
 				$.ajax({
-					url: "<? echo Router::url(array('controller'=>'sales','action'=>'updateInstalled')); ?>",
+					url: "<?php echo Router::url(array('controller'=>'sales','action'=>'updateInstalled')); ?>",
 					type : "post",
 					dataType: "Json",
 					data: { 
-						region: $('#region').val(), 
+						regionID: $('#regionID').val(), 
 						start: $('#startDate').val(), 
 						end: $('#endDate').val(),
 						sid: $(this).attr('data-sid'),
+						userID: $('#userID').val(),
 						installed: '0'
 					}
 				}).done(function(html){

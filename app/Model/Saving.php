@@ -23,13 +23,6 @@ class Saving extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		),
-		'Receivable' => array(
-			'className' => 'Receivable',
-			'foreignKey' => 'receivable_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
 		)
 	);
 	public function afterSave($created, $options = array())

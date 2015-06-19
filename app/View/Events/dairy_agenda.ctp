@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 $qtdUsers = count($eventByUser);
-//echo '<pre>'.print_r($events,true).'</pre>';
+//echo '<pre>'.print_r($usersList,true).'</pre>';
 $userslist = '<select name=\'selecUser\' class=\'form-control\'>';
 foreach ($users as $key => $value) {
 	$userslist .= "<option value='$key'>$value</option>";
@@ -20,7 +20,7 @@ var newEventForm = $('#newEventForm');
 <!-- NEW EVENT FORM -->
 <div style="display: none">
 	<span id="newEventForm">
-	<?
+	<?php
 		echo $this->Form2->create('Event');
 		echo $this->Form2->input('title');
 		echo $this->Form2->input('details');
@@ -30,40 +30,65 @@ var newEventForm = $('#newEventForm');
 </div>
 <!-- END NEW EVENT FORM -->
 
+<div class="row">
+	<div class="col-sm-1 col-lg-1 text-center">
+	<?php
+		echo $this->Html->link('Previous', 
+			array('action'=>'dairyAgenda',$eventDate), 
+			array('class'=>'btn btn-sm btn-info'));
+	?>
+	</div>
+	<div class="col-sm-5 col-lg-5 text-center">
+	</div>
+	<div class="col-sm-5 col-lg-5 text-center">
+	<?php
+		echo $this->Form2->select('User',$usersList);
+	?>
+	</div>
+	<div class="col-sm-1 col-lg-1 text-center">
+	<?php
+		echo $this->Html->link('Next', 
+			array('action'=>'dairyAgenda',$eventDate), 
+			array('class'=>'btn btn-sm btn-info'));
+	?>
+	</div>
+
+</div>
+
 <div class="row agendaTitle">
-	<div class="col-lg-1 text-center" style="border-right:1px dotted #ccc"><? echo date('F d, Y',strtotime($today)); ?></div>
+	<div class="col-lg-2 text-center" style="border-right:1px dotted #ccc"><?php echo date('F d, Y',strtotime($eventDate)); ?></div>
 	<div class="col-lg-10">
 		<div class="row">
-			<?
+			<?php
 			for ($t=0;$t<$qtdUsers;$t++){
 			?>
-			<div class="widthSize col-lg-<? echo round(12 / $qtdUsers); ?> text-center" style="border-right:1px dotted #ccc">
-				<? echo $eventByUser[$t]['User']['username']; ?>
+			<div class="widthSize col-lg-<?php echo round(12 / $qtdUsers); ?> text-center" style="border-right:1px dotted #ccc">
+				<?php echo $eventByUser[$t]['User']['username']; ?>
 			</div>
-			<?
+			<?php
 			}
 			?>
 		</div>
 	</div>
 </div>
 <div id="todaysAgenda">
-	<?
+	<?php
 	for ($i=16;$i<=45;$i++){
 	?>
 	<div class="row" style="border-bottom: 1px dotted #ccc; height: 25px">
-		<div class="col-lg-1 timeColumn text-center">
-			<? echo $i % 2 == 0 ? gmdate('h:i a', $i*1800) : ' ' ; ?>
+		<div class="col-lg-2 timeColumn text-center">
+			<?php echo $i % 2 == 0 ? gmdate('h:i a', $i*1800) : ' ' ; ?>
 		</div>
 		<div class="col-lg-10">
 			<div class="row">
-				<?
+				<?php
 				for ($t=0;$t<$qtdUsers;$t++){
 				?>
-				<div id="slot-<? echo $i.'-'.$eventByUser[$t]['User']['id']; ?>" class="col-lg-<? echo round(12 / $qtdUsers); ?>" style="border-right:1px dotted #ccc;height:20px">
+				<div id="slot-<?php echo $i.'-'.$eventByUser[$t]['User']['id']; ?>" class="col-lg-<?php echo round(12 / $qtdUsers); ?>" style="border-right:1px dotted #ccc;height:20px">
 
 				</div>
 				<script type="text/javascript">
-					$( "#slot-<? echo $i.'-'.$eventByUser[$t]['User']['id']; ?>" ).droppable({
+					$( "#slot-<?php echo $i.'-'.$eventByUser[$t]['User']['id']; ?>" ).droppable({
 						tolerance: "pointer",
 						accept: function(d){
 							if (!$(this).children().length > 0){
@@ -75,10 +100,10 @@ var newEventForm = $('#newEventForm');
 							var eventSplitted =slotNumIDAnt.split('-');
 							var slotNumID = $( this ).attr('id');
 							var slotNumIDSplitted = slotNumID.split('-');
-							if (!$('#event-'+slotNumIDSplitted[1]+"-<? echo $eventByUser[$t]['User']['id']; ?>-"+eventSplitted[3] ).length > 0 ) 
+							if (!$('#event-'+slotNumIDSplitted[1]+"-<?php echo $eventByUser[$t]['User']['id']; ?>-"+eventSplitted[3] ).length > 0 ) 
 							{
 								$(this).append(ui.draggable.css({position: "relative", top:"", left:""}));
-								ui.draggable.attr('id','event-'+slotNumIDSplitted[1]+"-<? echo $eventByUser[$t]['User']['id']; ?>-"+eventSplitted[3]);
+								ui.draggable.attr('id','event-'+slotNumIDSplitted[1]+"-<?php echo $eventByUser[$t]['User']['id']; ?>-"+eventSplitted[3]);
 								var endEvent = Math.round((ui.draggable.height()/25));
 								$.ajax({
 									url: "<?php echo Router::url(array('controller'=>'events','action'=>'update'));?>",
@@ -86,8 +111,8 @@ var newEventForm = $('#newEventForm');
 									dataType: 'Json',
 									data: {
 										id: eventSplitted[3],
-										user: "<? echo $eventByUser[$t]['User']['id']; ?>",
-										start: "<? echo date('Y-m-d ', strtotime($eventDate)).gmdate('h:i:s', $i*1800); ?>",
+										user: "<?php echo $eventByUser[$t]['User']['id']; ?>",
+										start: "<?php echo date('Y-m-d ', strtotime($eventDate)).gmdate('h:i:s', $i*1800); ?>",
 										end: endEvent
 									} 
 								})
@@ -101,13 +126,13 @@ var newEventForm = $('#newEventForm');
 						});
 					});
 				</script>
-				<?
+				<?php
 				}
 				?>
 			</div>
 		</div>
 	</div>
-	<? } ?>
+	<?php } ?>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -115,7 +140,7 @@ var newEventForm = $('#newEventForm');
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel"><? echo $i; ?></h4>
+				<h4 class="modal-title" id="myModalLabel"><?php echo $i; ?></h4>
 			</div>
 			<div class="modal-body">
 			</div>
@@ -128,7 +153,7 @@ var newEventForm = $('#newEventForm');
 </div>
 <!-- /.modal -->
 <script type="text/javascript">
-	<?
+	<?php
 	foreach ($events as $key => $event) {
 		for ($i=0; $i < 47; $i++) 
 		{ 
@@ -139,21 +164,21 @@ var newEventForm = $('#newEventForm');
 				$heightFactor = ( ( (strtotime($event['Event']['end'] ) - strtotime($event['Event']['start'])) / 60 ) / 30 );
 				$height =  $heightFactor * 25 ; 
 				?>
-	var formEditEvent<? echo $i ?> = "<form method=\"POST\" class='well' action='#'><input name='title' value='<? echo $event['Event']['title'] ?>' class='form-control'><? echo $userslist ; ?><input name='details' value='<? echo $event['Event']['details'] ?>' class='form-control'><input name='details' value='<? echo $event['Event']['details'] ?>' class='form-control'><input name='details' value='<? echo $event['Event']['details'] ?>' class='form-control'><input name='details' value='<? echo $event['Event']['details'] ?>' class='form-control'></form>"
-	$( "#slot-<? echo $i.'-'.$event['Event']['user_id'] ; ?>" ).html("<div class=\"event<? echo $event['Event']['pinned']?'':' draggable'; ?>\" id=\"event-<? echo $i.'-'.$event['Event']['user_id'].'-'.$event['Event']['id'] ; ?>\"style=\"background-color: <? echo $event['EventType']['color'].'; height: '.$height.'px'; ?>; top: 0; <? echo $event['Event']['pinned']?'z-index: 90000':''; ?>\"><div class=\"eventTitle\"><? echo $event['Event']['title'].' - '.$height ; ?><? echo $event['Event']['pinned']?'<span class=\"pull-right eventInfoIcon\"><span class=\"glyphicon glyphicon-pushpin\"></span></span>':''; ?></div></div>").click( function(){
-			$( '.modal-title' ).html("<? echo $event['Event']['title'] ?>")
-			$( '.modal-body' ).html(formEditEvent<? echo $i ?>);
-			$( '[name=selecUser]' ).val("<? echo $event['Event']['user_id']; ?>")
+	var formEditEvent<?php echo $i ?> = "<form method=\"POST\" class='well' action='#'><input name='title' value='<?php echo $event['Event']['title'] ?>' class='form-control'><?php echo $userslist ; ?><input name='details' value='<?php echo $event['Event']['details'] ?>' class='form-control'><input name='details' value='<?php echo $event['Event']['details'] ?>' class='form-control'><input name='details' value='<?php echo $event['Event']['details'] ?>' class='form-control'><input name='details' value='<?php echo $event['Event']['details'] ?>' class='form-control'></form>"
+	$( "#slot-<?php echo $i.'-'.$event['Event']['user_id'] ; ?>" ).html("<div class=\"event<?php echo $event['Event']['pinned']?'':' draggable'; ?>\" id=\"event-<?php echo $i.'-'.$event['Event']['user_id'].'-'.$event['Event']['id'] ; ?>\"style=\"background-color: <?php echo $event['EventType']['color'].'; height: '.$height.'px'; ?>; top: 0; <?php echo $event['Event']['pinned']?'z-index: 90000':''; ?>\"><div class=\"eventTitle\"><?php echo $event['Event']['title'].' - '.$height ; ?><?php echo $event['Event']['pinned']?'<span class=\"pull-right eventInfoIcon\"><span class=\"glyphicon glyphicon-pushpin\"></span></span>':''; ?></div></div>").click( function(){
+			$( '.modal-title' ).html("<?php echo $event['Event']['title'] ?>")
+			$( '.modal-body' ).html(formEditEvent<?php echo $i ?>);
+			$( '[name=selecUser]' ).val("<?php echo $event['Event']['user_id']; ?>")
 			$( '#myModal' ).modal({
 				keyboard: false
 		})
 	})
-				<?
+				<?php
 				for ($i0=$i+1; $i0 < ($i+$heightFactor);$i0++)
 				{
 					?>
-	$( "#slot-<? echo $i0.'-'.$event['Event']['user_id'] ; ?>" ).html("<div class=\"no-dropable\"></div>");
-					<?
+	$( "#slot-<?php echo $i0.'-'.$event['Event']['user_id'] ; ?>" ).html("<div class=\"no-dropable\"></div>");
+					<?php
 				}
 			}
 		}
@@ -210,7 +235,7 @@ var newEventForm = $('#newEventForm');
 				data: {
 					id: slotNumIDSplitted[3],
 					user: slotNumIDSplitted[2],
-					start: "<? echo date('Y-m-d ', strtotime($events[0]['Event']['start'])); ?>",
+					start: "<?php echo date('Y-m-d ', strtotime($events[0]['Event']['start'])); ?>",
 					startTime: slotNumIDSplitted[1],
 					end: endEvent
 				},

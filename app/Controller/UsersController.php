@@ -30,6 +30,8 @@ class UsersController extends AppController {
 	public function index() {
 		$this->User->recursive = 0;
 		$this->set('users', $this->paginate());
+		$regions = $this->User->Region->find('list');
+		$this->set(compact('regions'));
 	}
 
 /**
@@ -106,7 +108,8 @@ class UsersController extends AppController {
 		}
 		$roles = $this->User->Role->find('list');
 		$carriers = $this->User->Carrier->find('list');
-		$this->set(compact('roles','carriers'));
+		$regions = $this->User->Region->find('list');
+		$this->set(compact('roles','carriers','regions'));
 	}
 
 /**
@@ -139,7 +142,8 @@ class UsersController extends AppController {
 		$carriers = $this->User->Carrier->find('list');
 		$parents = $this->User->ParentUser->find('list');
 		$leaders = $this->User->find('list', array('conditions'=>array('User.role_id'=>array('2','4'))));
-		$this->set(compact('roles','carriers','parents','leaders'));
+		$regions = $this->User->Region->find('list');
+		$this->set(compact('roles','carriers','parents','leaders','regions'));
 	}
 
 /**

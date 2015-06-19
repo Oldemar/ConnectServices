@@ -31,6 +31,13 @@ class Sale extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Region' => array(
+			'className' => 'Region',
+			'foreignKey' => 'region_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 
@@ -135,66 +142,6 @@ class Sale extends AppModel {
 						'Sale.user_id'=>$id,
 						'MONTH(Sale.sales_date)'=> date('m')
 						))));		
-	}
-
-	public function getSalesByTV($id,$serv,$region,$start,$end)
-	{
-		return $this->find('count', array(
-					'conditions'=>array(
-						'AND'=>array(
-							'Sale.comissioned'=> 0,
-							'Sale.tv'=>$serv,
-							'Sale.user_id'=>$id,
-							'Sale.comissioned'=>false,
-							'User.region'=>$region,
-							'Sale.sales_date >='=>$start,
-							'Sale.sales_date <='=>$end
-							))));
-	}
-
-	public function getSalesByNet($id,$serv,$region,$start,$end)
-	{
-		return $this->find('count', array(
-					'conditions'=>array(
-						'AND'=>array(
-							'Sale.comissioned'=> 0,
-							'Sale.internet'=>$serv,
-							'Sale.user_id'=>$id,
-							'Sale.comissioned'=>false,
-							'User.region'=>$region,
-							'Sale.sales_date >='=>$start,
-							'Sale.sales_date <='=>$end
-							))));
-	}
-
-	public function getSalesByPh($id,$serv,$region,$start,$end)
-	{
-		return $this->find('count', array(
-					'conditions'=>array(
-						'AND'=>array(
-							'Sale.comissioned'=> 0,
-							'Sale.phone'=>$serv,
-							'Sale.user_id'=>$id,
-							'Sale.comissioned'=>false,
-							'User.region'=>$region,
-							'Sale.sales_date >='=>$start,
-							'Sale.sales_date <='=>$end
-							))));
-	}
-
-	public function getSalesByXh($id,$serv,$region,$start,$end)
-	{
-		return $this->find('count', array(
-					'conditions'=>array(
-						'AND'=>array(
-							'Sale.comissioned'=> 0,
-							'Sale.homeSecurity'=>$serv,
-							'Sale.user_id'=>$id,
-							'Sale.comissioned'=>false,
-							'User.region'=>$region,
-							'Sale.sales_date >='=>$start,
-							'Sale.sales_date <='=>$end
-							))));
 	}
 	
 }

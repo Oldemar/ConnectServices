@@ -68,6 +68,8 @@ class SalesController extends AppController {
 						'Sale.comissioned'=>false
 					)));
 		}
+		$regions = $this->Sale->Region->find('list');
+		$this->set(compact('regions'));
 		$this->set('sales', $this->Paginator->paginate());
 	}
 
@@ -80,18 +82,35 @@ class SalesController extends AppController {
 
 		$this->Sale->recursive = 1;
 		$this->autoRender = false;
-		$conditions = array('User.region'=>$this->data['region']);
+		$conditions = array('Sale.region_id'=>$this->data['region']);
 		if (!empty($this->data['start'])) {
 			$conditions['Sale.sales_date >='] = date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00'));
 			$conditions['Sale.sales_date <='] = date('Y-m-d H:i:s',strtotime($this->data['end'].' 23:59:59'));
 		}
-//		debug($conditions);
+		if (!empty($this->data['user_id'])) {
+			$conditions['Sale.user_id'] = $this->data['user_id'];
+		}
 		$this->Paginator->settings = array(
 			'conditions'=>array($conditions));
 
 		$sales = $this->Paginator->paginate();
-//		debug($sales);
 		$arrReturn[] = $this->element('Sales/allsales',array('sales'=>$sales));
+		echo json_encode($arrReturn);
+		exit;
+	}
+
+/**
+ * allsalesbyuserAJAX method
+ *
+ * @return void
+ */
+	public function allsalesbyuserAJAX($id) {
+
+		$this->Sale->recursive = 1;
+		$this->autoRender = false;
+		$sales = $this->Sale->find('all', array('conditions'=>array('Sale.id'=>$id)));
+		debug($sales);
+		$arrReturn[] = $this->element('Sales/allsalesbyuser',array('sales'=>$sales));
 		echo json_encode($arrReturn);
 		exit;
 	}
@@ -120,16 +139,24 @@ class SalesController extends AppController {
  *
  * @return void
  */
-	public function listsalesAJAX($controllerText) {
+	public function listsalesAJAX() {
 
 		$this->Sale->recursive = 1;
 		$this->autoRender = false;
-		$conditions = array('User.region' => $this->data['region'],'Sale.comissioned' => 0);
-		if ($controllerText == 'Advance') $conditions['Sale.advanced'] = 0;
+		$conditions = array('Sale.comissioned' => 0);
+		if (isset($this->data['regionID']) && !empty($this->data['regionID'])) {
+			$conditions['Sale.region_id'] = $this->data['regionID'];
+		}
 		if (!empty($this->data['start'])) {
 			$conditions['Sale.sales_date >='] = date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00'));
 			$conditions['Sale.sales_date <='] = date('Y-m-d H:i:s',strtotime($this->data['end'].' 23:59:59'));
 		}
+		if (isset($this->data['userID']) && !empty($this->data['userID'])) {
+			$conditions['Sale.user_id'] = $this->data['userID'];
+		}
+
+		$this->set('conditions',$conditions);
+
 		$this->Paginator->settings = array(
 			'conditions'=>array($conditions));
 
@@ -149,18 +176,9 @@ class SalesController extends AppController {
 		$this->autoRender = false;
 
 		$this->Sale->id = $this->data['sid'];
-		$this->Sale->saveField('installed', $this->data['installed']);
+		
+		$arrReturn = $this->Sale->saveField('installed', $this->data['installed']);
 
-		$conditions = array('User.region'=>$this->data['region'],'Sale.comissioned' => 0);
-		if (!empty($this->data['start'])) {
-			$conditions['Sale.sales_date >='] = date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00'));
-			$conditions['Sale.sales_date <='] = date('Y-m-d H:i:s',strtotime($this->data['end'].' 23:59:59'));
-		}
-		$this->Paginator->settings = array(
-			'conditions'=>array($conditions));
-
-		$sales = $this->Paginator->paginate();
-		$arrReturn[] = $this->element('Sales/listsales',array('sales'=>$sales));
 		echo json_encode($arrReturn);
 		exit;
 	}
@@ -199,8 +217,9 @@ class SalesController extends AppController {
 			'conditions'=>array(
 				'User.role_id !='=>array('1','2','7','8','9'))));
 		$customers = $this->Sale->Customer->find('list');
+		$regions = $this->Sale->Region->find('list');
 		$carriers = $this->Sale->Customer->Carrier->find('list');
-		$this->set(compact('users', 'customers','carriers'));
+		$this->set(compact('users', 'customers','carriers','regions'));
 	}
 
 /**
@@ -229,7 +248,8 @@ class SalesController extends AppController {
 			'conditions'=>array(
 				'User.role_id !='=>array('1','2','7','8','9'))));
 		$customers = $this->Sale->Customer->find('list');
-		$this->set(compact('users', 'customers'));
+		$regions = $this->Sale->Region->find('list');
+		$this->set(compact('users', 'customers','regions'));
 	}
 
 /**

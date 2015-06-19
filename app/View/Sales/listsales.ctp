@@ -1,60 +1,79 @@
 <?php
 $controllerAction = $controllerText == 'Advance' ? 'advance' : 'payroll';
 ?>
-<div class="sales index">
-	<h2><?php echo __($controllerText.' - Not comissioned Sales'); ?></h2>
+	<h2><?php echo __('Not comissioned Sales'); ?></h2>
 	<div class="row" style="padding-bottom: 15px">
-		<div class="col-lg-4 col-md-4" style="padding:5px; border: 1px solid #ccc; border-radius: 10px">
-			<div class="row">
-				<div class="col-lg-4 col-md-4">
-					<h5><b>Region:</b></h5>
-				</div>
-				<div class="col-lg-8 col-md-8">
-				<?php
-					echo $this->Form2->create('Payroll',array('action'=>'generate'.$controllerAction));
-					echo $this->Form2->input('User.region', array(
-						'label'=>false,
-						'div'=>false,
-						'id'=>'region',
-						'class'=>'form-control srcInput'
-						));
-				?>
+		<div class="col-lg-4" style="padding: 5px; ">
+			<div style="padding: 5px; border: 1px solid #ccc; border-radius: 10px">
+				<div class="row">
+					<div class="col-lg-4">
+						<h5><b>Region:</b></h5>
+					</div>
+					<div class="col-lg-8">
+					<?php
+						echo $this->Form2->input('region_id', array(
+							'empty'=>'Choose a region',
+							'label'=>false,
+							'div'=>false,
+							'id'=>'region',
+							'class'=>'form-control srcInput'
+							));
+					?>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-1 col-md-1">
+		<div class="col-lg-5" style="padding:5px;">
+			<div style="padding: 5px; border: 1px solid #ccc; border-radius: 10px">
+				<div class="row">
+					<div class="col-lg-1">
+						<h5><b>From</b></h5>
+					</div>
+					<div class="col-lg-5">
+					<?php
+						echo $this->Form2->input('start', array(
+							'type'=>'text',
+							'class'=>'form-control srcInput',
+							'id'=>'startDate',
+							'label'=>false,
+							'div'=>false
+							));
+					?>
+					</div>
+					<div class="col-lg-1">
+						<h5><b>To</b></h5>
+					</div>
+					<div class="col-lg-5">
+					<?php
+						echo $this->Form2->input('end', array(
+							'type'=>'text',
+							'id'=>'endDate',
+							'class'=>'form-control srcInput',
+							'label'=>false,
+							'div'=>false
+							));
+					?>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="col-lg-5 col-md-5" style="padding:5px; border: 1px solid #ccc; border-radius: 10px">
-			<div class="row">
-				<div class="col-lg-1 col-md-1">
-					<h5><b>From</b></h5>
-				</div>
-				<div class="col-lg-5 col-md-5">
-				<?php
-					echo $this->Form2->input('start', array(
-						'type'=>'text',
-						'required'=>'required',
-						'class'=>'form-control srcInput',
-						'id'=>'startDate',
-						'label'=>false,
-						'div'=>false
-						));
-				?>
-				</div>
-				<div class="col-lg-1 col-md-1">
-					<h5><b>To</b></h5>
-				</div>
-				<div class="col-lg-5 col-md-5">
-				<?php
-					echo $this->Form2->input('end', array(
-						'type'=>'text',
-						'required'=>'required',
-						'id'=>'endDate',
-						'class'=>'form-control srcInput',
-						'label'=>false,
-						'div'=>false
-						));
-				?>
+		<div class="col-lg-3" style="padding:5px;">
+			<div style="padding: 5px; border: 1px solid #ccc; border-radius: 10px">
+				<div class="row">
+					<div class="col-lg-4">
+						<h5><b>User:</b></h5>
+					</div>
+					<div class="col-lg-8">
+					<?php
+						echo $this->Form2->input('user_id', array(
+							'empty'=>'All Users',
+							'label'=>false,
+							'div'=>false,
+							'id'=>'region',
+							'class'=>'form-control srcInput'
+							));
+					?>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -83,7 +102,7 @@ $controllerAction = $controllerText == 'Advance' ? 'advance' : 'payroll';
 			});
 			$('.srcInput').change(function(e){
 				$.ajax({
-					url: "<? echo Router::url(array('controller'=>'sales','action'=>'listsalesAJAX',$controllerText)); ?>",
+					url: "<?php echo Router::url(array('controller'=>'sales','action'=>'listsalesAJAX',$controllerText)); ?>",
 					type : "post",
 					dataType: "Json",
 					data: { 

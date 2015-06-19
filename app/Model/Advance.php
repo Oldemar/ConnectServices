@@ -4,7 +4,7 @@ App::uses('AppModel', 'Model');
  * Advance Model
  *
  * @property User $User
- * @property Sale $Sale
+ * @property Advance $Sale
  */
 class Advance extends AppModel {
 
@@ -32,4 +32,21 @@ class Advance extends AppModel {
 			'order' => ''
 		)
 	);
+
+	public function beforeSave($options = array())
+	{
+		if (isset($this->data['Advance']['advdate']))
+		{
+			$this->data['Advance']['advdate'] = date('Y-m-d', strtotime($this->data['Advance']['advdate']));
+		}
+		$lastAdvance = $this->Advance->find('first', array(
+			'conditions'=>array(
+				'Advance.user_id'=>$data['Advance']['user_id']),
+			'ORDER'=>'Advance.advdate DESC',
+			'LIMIT'=>1
+		));
+		$this->data['Advance']['balance'] = $this->data['Advance']['value'] + $lastAdvance['Advance']['balance'];
+	}
+
+
 }

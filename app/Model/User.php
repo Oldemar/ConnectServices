@@ -75,6 +75,13 @@ public $actsAs = array('Tree','Containable');
 			'fields' => '',
 			'order' => ''
 		),
+		'Region' => array(
+			'className' => 'Region',
+			'foreignKey' => 'region_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 		'Carrier' => array(
 			'className' => 'Carrier',
 			'foreignKey' => 'carrier_id',
@@ -125,32 +132,6 @@ public $actsAs = array('Tree','Containable');
 		),
 		'Sale' => array(
 			'className' => 'Sale',
-			'foreignKey' => 'user_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'Comission' => array(
-			'className' => 'Comission',
-			'foreignKey' => 'user_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'Receivable' => array(
-			'className' => 'Receivable',
 			'foreignKey' => 'user_id',
 			'dependent' => false,
 			'conditions' => '',

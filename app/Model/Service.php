@@ -18,23 +18,17 @@ class Service extends AppModel {
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
- * hasMany associations
+ * belongsTo associations
  *
  * @var array
  */
-	public $hasMany = array(
-		'Saleservice' => array(
-			'className' => 'Saleservice',
-			'foreignKey' => 'service_id',
-			'dependent' => false,
+	public $belongsTo = array(
+		'Region' => array(
+			'className' => 'Region',
+			'foreignKey' => 'region_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
+			'order' => ''
 		)
 	);
 
@@ -45,6 +39,7 @@ class Service extends AppModel {
 				)));
 		return $return['Service']['price'];
 	}
+
 
 
 }

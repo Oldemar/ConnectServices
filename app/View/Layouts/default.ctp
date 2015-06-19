@@ -29,7 +29,7 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 	</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-	<link type="text/css" rel="stylesheet" href="<? echo $this->webroot; ?>bootstrap/css/bootstrap.css">
+	<link type="text/css" rel="stylesheet" href="<?php echo $this->webroot; ?>bootstrap/css/bootstrap.css">
 	<link href="<?php echo $this->webroot ; ?>bootstrap/css/bootstrap-glyphicons.css" rel="stylesheet">
 
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
@@ -38,12 +38,8 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 	<!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-<? /*	 
-	<script type="text/javascript" src="<? echo $this->webroot; ?>js/jquery-1.9.1.js"></script>
-	<script type="text/javascript" src="<? echo $this->webroot; ?>js/jquery-ui.js"></script>
-*/ ?>
 	<!-- Bootstrap  -->
-	<script type="text/javascript" src="<? echo $this->webroot; ?>bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="<?php echo $this->webroot; ?>bootstrap/js/bootstrap.js"></script>
 
 	<?php
 		echo $this->Html->meta('icon');
@@ -56,7 +52,7 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 	?>
-	<link type="text/css" rel="stylesheet" href="<? echo $this->webroot; ?>css/jquery-ui.css">
+	<link type="text/css" rel="stylesheet" href="<?php echo $this->webroot; ?>css/jquery-ui.css">
 </head>
 <body>
 	<div id="container">
@@ -74,70 +70,21 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 					?>
 					<ul class="nav navbar-nav">
 						<li>
-							<? echo $this->Html->link('Dashboard', array('controller'=>'users', 'action'=>'dashboard')); ?>
+							<?php echo $this->Html->link('Dashboard', array('controller'=>'users', 'action'=>'dashboard')); ?>
 						</li>
-						<?
-							if(Authcomponent::User('role_id') == 8) {
-						?>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Developer<b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li>
-									<?php 
-										echo $this->Html->link('Users', array('controller'=>'Users')); 
-									?>
-								</li>
-								<li>
-									<?php 
-										echo $this->Html->link('Log', array('controller'=>'logs')); 
-									?>
-							</ul>
-						</li>
-						<?
-						}
+						<?php
 						if (in_array(Authcomponent::User('role_id'), array('1','2','4','8'))) {
 						?>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Pay Roll<b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li>
-									<?php 
-										echo $this->Html->link('Not Comissioned ', array('controller'=>'sales','action'=>'listsales','Payroll')); 
-									?>
-								</li>
-								<li>
-									<?php 
-										echo $this->Html->link('List Payrolls', array('controller'=>'payrolls','action'=>'index')); 
-									?>
-								</li>
-							</ul>
-						</li>
-						<?
-						}
-						if (in_array(Authcomponent::User('role_id'), array('1','2','4','8'))) {
-						?>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Advances<b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li>
-									<?php 
-										echo $this->Html->link('Not Comissioned ', array('controller'=>'sales','action'=>'listsales','Advance')); 
-									?>
-								</li>
-								<li>
-									<?php 
-										echo $this->Html->link('List Advances', array('controller'=>'advances','action'=>'index')); 
-									?>
-								</li>
-							</ul>
-						</li>
-						<?
+						<?php
 						}
 						if($isAuthorized) {
 						?>
+						<li>
+							<?php echo $this->Html->link('Payroll Generator', array('controller'=>'payrolls', 'action'=>'listsales')); ?>
+						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								Admin
+								Suport
 								<b class="caret"></b>
 							</a>
 							<ul class="dropdown-menu">
@@ -147,24 +94,9 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 								?>
 								</li>
 								<li>
-									<?php 
-									  echo $this->Html->link('Sales', array('controller'=>'sales', 'action'=>'index')); 
-									?>
-								</li>
-								<li>
 								<?php 
 									echo $this->Html->link('Roles', array('controller'=>'roles', 'action'=>'index')); 
 								?>
-								</li>
-								<li>
-								<?php 
-									echo $this->Html->link('Savings', array('controller'=>'savings', 'action'=>'index')); 
-								?>
-								</li>
-								<li>
-									<?php 
-									  echo $this->Html->link('Sales', array('controller'=>'sales', 'action'=>'index')); 
-									?>
 								</li>
 								<li>
 									<?php 
@@ -173,13 +105,26 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 								</li>
 								<li>
 									<?php 
-									  echo $this->Html->link('Carriers', array('controller'=>'carriers', 'action'=>'index')); 
+									  echo $this->Html->link('Regions', array('controller'=>'regions', 'action'=>'index')); 
 									?>
 								</li>
 								<li>
 									<?php 
-									  echo $this->Html->link('Comissions', array('controller'=>'comissions', 'action'=>'index')); 
+									  echo $this->Html->link('Carriers', array('controller'=>'carriers', 'action'=>'index')); 
 									?>
+								</li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								Admin
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+								<?php 
+									echo $this->Html->link('Advances', array('controller'=>'advances', 'action'=>'index')); 
+								?>
 								</li>
 								<li>
 									<?php 
@@ -188,12 +133,22 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 								</li>
 								<li>
 									<?php 
-									  echo $this->Html->link('Pay Rolls', array('controller'=>'payrolls','action'=>'index')); 
+									  echo $this->Html->link('PayRoll List', array('controller'=>'payrolls', 'action'=>'index')); 
 									?>
+								</li>
+								<li>
+									<?php 
+									  echo $this->Html->link('Sales', array('controller'=>'sales', 'action'=>'index')); 
+									?>
+								</li>
+								<li>
+								<?php 
+									echo $this->Html->link('Savings', array('controller'=>'savings', 'action'=>'index')); 
+								?>
 								</li>
 							</ul>
 						</li>
-						<?
+						<?php
 						}
 						if (Authcomponent::User('role_id') !='7') {						?>
 						<li class="dropdown">
@@ -227,7 +182,7 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 									}
 								?>
 								</li>
-								<?
+								<?php
 								if ($objLoggedUser->getAttr('role_id') != '2')
 								{
 								?>
@@ -237,29 +192,12 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 										echo $this->Html->link('My PayRoll', '#'); 
 									?>
 								</li>
-								<?
+								<?php
 								}
 								?>
 							</ul>
 						</li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								Customer<b class="caret"></b>
-							</a>
-							<ul class="dropdown-menu">
-								<li>
-								<?
-									echo $this->Html->link('List',array('controller'=>'customers','action'=>'index')); 
-								?>
-								</li>
-								<li>
-								<?
-									echo $this->Html->link('New',array('controller'=>'customers','action'=>'add')); 
-								?>
-								</li>
-							</ul>
-						</li>
-						<?
+						<?php
 						}
 						?>
 						<li class="dropdown">
@@ -268,33 +206,33 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 							</a>
 							<ul class="dropdown-menu">
 								<li>
-								<?
+								<?php
 									echo $this->Html->link('Week',array('controller'=>'events','action'=>'weeklyAgenda',date('Y-m-d',strtotime($today)))); 
 								?>
 								</li>
 								<li>
-								<?
-									echo $this->Html->link('Day',array('controller'=>'events','action'=>'dairyAgenda',date('Y-m-d',strtotime($today)))); 
+								<?php
+									echo $this->Html->link('Day',array('controller'=>'events','action'=>'dairyAgendaNew',date('Y-m-d',strtotime($today)))); 
 								?>
 								</li>
 							</ul>
 						</li>
 						<li class="dropdown pull-right">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<? echo $username ; ?>
+								<?php echo $username ; ?>
 								<b class="caret"></b>
 							</a>
 							<ul class="dropdown-menu">
 								<li>
-								<? echo $this->Html->link('Profile', array('controller'=>'users','action'=>'edit',$objLoggedUser->GetID())); ?>
+								<?php echo $this->Html->link('Profile', array('controller'=>'users','action'=>'edit',$objLoggedUser->GetID())); ?>
 								</li>
 								<li>
-								<? echo $this->Html->link('Logout', array('controller'=>'users','action'=>'logout')); ?>
+								<?php echo $this->Html->link('Logout', array('controller'=>'users','action'=>'logout')); ?>
 								</li>
 						  	</ul>
 						</li>
 					</ul>
-					<? 
+					<?php
 					} 
 					else 
 					{
@@ -303,7 +241,7 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 					?>
 					<ul class="nav navbar-nav">
 						<li>
-						<? echo $this->Html->link('About Us', '#'); ?>
+						<?php echo $this->Html->link('About Us', '#'); ?>
 						</li>
 					</ul>
 					<?php

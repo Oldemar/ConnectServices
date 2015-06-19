@@ -5,7 +5,7 @@
 			<th><?php echo $this->Paginator->sort('tv'); ?></th>
 			<th><?php echo $this->Paginator->sort('internet'); ?></th>
 			<th><?php echo $this->Paginator->sort('phone'); ?></th>
-			<th><?php echo $this->Paginator->sort('homeSecurity'); ?></th>
+			<th><?php echo $this->Paginator->sort('xfinity_home'); ?></th>
 			<th><?php echo $this->Paginator->sort('sales_date'); ?></th>
 			<th><?php echo $this->Paginator->sort('instalation'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -21,7 +21,7 @@
 		<td><?php echo h($sale['Sale']['tv']); ?>&nbsp;</td>
 		<td><?php echo h($sale['Sale']['internet']); ?>&nbsp;</td>
 		<td><?php echo h($sale['Sale']['phone']); ?>&nbsp;</td>
-		<td><?php echo h($sale['Sale']['homeSecurity']); ?>&nbsp;</td>
+		<td><?php echo h($sale['Sale']['xfinity_home']); ?>&nbsp;</td>
 		<td><?php echo CakeTime::format($sale['Sale']['sales_date'], '%B %e, %Y '); ?>&nbsp;</td>
 		<td><?php if ($sale['Sale']['instalation'] != '0000-00-00 00:00:00') echo CakeTime::format($sale['Sale']['instalation'], '%B %e, %Y '); ?>&nbsp;</td>
 		<td class="actions">

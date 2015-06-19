@@ -6,8 +6,7 @@
 			<th><?php echo $this->Paginator->sort('tv'); ?></th>
 			<th><?php echo $this->Paginator->sort('internet'); ?></th>
 			<th><?php echo $this->Paginator->sort('phone'); ?></th>
-			<th><?php echo $this->Paginator->sort('homeSecurity'); ?></th>
-			<th><?php echo $this->Paginator->sort('extras'); ?></th>
+			<th><?php echo $this->Paginator->sort('xfinity_home'); ?></th>
 			<th><?php echo $this->Paginator->sort('sales_date'); ?></th>
 			<th><?php echo $this->Paginator->sort('comissioned'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -20,8 +19,7 @@
 		<td><?php echo h($sale['Sale']['tv']); ?>&nbsp;</td>
 		<td><?php echo h($sale['Sale']['internet']); ?>&nbsp;</td>
 		<td><?php echo h($sale['Sale']['phone']); ?>&nbsp;</td>
-		<td><?php echo h($sale['Sale']['homeSecurity']); ?>&nbsp;</td>
-		<td><?php echo h($sale['Sale']['extras']); ?>&nbsp;</td>
+		<td><?php echo h($sale['Sale']['xfinity_home']); ?>&nbsp;</td>
 		<td><?php echo h($sale['Sale']['sales_date']); ?>&nbsp;</td>
 		<td><?php echo h($sale['Sale']['comissioned']); ?>&nbsp;</td>
 		<td class="actions">

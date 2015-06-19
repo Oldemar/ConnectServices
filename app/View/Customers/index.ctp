@@ -1,5 +1,9 @@
 <div class="customers index">
-	<h2><?php echo __('Customers'); ?></h2>
+	<h2><?php echo __('Customers'); ?>
+	<?php
+		echo $this->Html->link('New Customer',array('action'=>'add'),array('class'=>'btn btn-lg btn-info pull-right','style'=>'color: black; font-weight: bold'));
+	?>
+	</h2>
 	<table class="table table-bordered table-hover">
 	<tr>
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
@@ -11,7 +15,6 @@
 			<th><?php echo $this->Paginator->sort('state'); ?></th>
 			<th><?php echo $this->Paginator->sort('zipcode'); ?></th>
 			<th><?php echo $this->Paginator->sort('cellphone'); ?></th>
-			<th><?php echo $this->Paginator->sort('carrier_id'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($customers as $customer): ?>
@@ -27,17 +30,6 @@
 		<td><?php echo h($customer['Customer']['state']); ?>&nbsp;</td>
 		<td><?php echo h($customer['Customer']['zipcode']); ?>&nbsp;</td>
 		<td><?php echo h($customer['Customer']['cellphone']); ?>&nbsp;</td>
-		<td>
-			<?php
-			if ( in_array($objLoggedUser->getAttr('role_id'),array('1', '2', '8', '9')) )
-			{
-				echo $this->Html->link($customer['Carrier']['name'], array('controller' => 'carriers', 'action' => 'view', $customer['Carrier']['id'])); 
-			}
-			else
-				{
-					echo h($customer['Carrier']['name']);
-				}?>
-		</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $customer['Customer']['id']), array('class'=>'btn btn-sm btn-success')); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $customer['Customer']['id']), array('class'=>'btn btn-sm btn-primary')); ?>

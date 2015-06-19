@@ -24,6 +24,18 @@
 			}
 		?>
 		<?php
+			echo $this->Form2->input('region_id', array(
+				'class'=>'form-control pull-left',
+				'style'=>'width: 250px',
+				'required'=>'required',
+				'placeholder'=>'This field is required',
+				'label'=>array(
+					'class'=>'pull-left',
+					'style'=>'width: 100px'
+					)));
+		?>
+		<div style="clear: both"></div>
+		<?php
 			echo $this->Form2->input('sales_date', array(
 				'type'=>'text',
 				'required'=>'required',
@@ -181,16 +193,6 @@
 		?>
 		<div style="clear: both"></div>
 		<?php
-				echo $this->Form2->input('Customer.homephone', array(
-				'class'=>'form-control pull-left',
-				'style'=>'width: 250px',
-				'label'=>array(
-					'class'=>'pull-left',
-					'style'=>'width: 100px'
-					)));
-		?>
-		<div style="clear: both"></div>
-		<?php
 				echo $this->Form2->input('Customer.cellphone', array(
 				'class'=>'form-control pull-left',
 				'style'=>'width: 250px',
@@ -213,6 +215,16 @@
 		?>
 		<div style="clear: both"></div>
 		<?php
+				echo $this->Form2->input('Customer.homephone', array(
+				'class'=>'form-control pull-left',
+				'style'=>'width: 250px',
+				'label'=>array(
+					'class'=>'pull-left',
+					'style'=>'width: 100px'
+					)));
+		?>
+		<div style="clear: both"></div>
+		<?php
 				echo $this->Form2->input('Customer.workphone', array(
 				'class'=>'form-control pull-left',
 				'style'=>'width: 250px',
@@ -225,6 +237,16 @@
 	</div>
 	<div class="col-lg-4">
 		<h4 class="text-center">Services</h4>
+		<?php
+				echo $this->Form2->input('category', array(
+				'class'=>'form-control pull-left',
+				'style'=>'width: 250px',
+				'label'=>array(
+					'class'=>'pull-left',
+					'style'=>'width: 100px'
+					)));
+		?>
+		<div style="clear: both"></div>
 		<?php
 				echo $this->Form2->input('tv', array(
 				'class'=>'form-control pull-left',
@@ -256,7 +278,7 @@
 		?>
 		<div style="clear: both"></div>
 		<?php
-				echo $this->Form2->input('homeSecurity', array(
+				echo $this->Form2->input('xfinity_home', array(
 				'class'=>'form-control pull-left',
 				'style'=>'width: 250px',
 				'label'=>array(
@@ -264,15 +286,6 @@
 					'style'=>'width: 100px'
 					)));
 		?>
-		<div style="clear: both"></div>
-		<div class="row" style="padding:10px 0">
-			<div class="col-lg-3"><b>Extras</b></div>
-		<?php
-			echo '<div class="col-lg-3"><b>Globo '.$this->Form2->checkbox('globo').'</b></div>';
-			echo '<div class="col-lg-3"><b>PFC '.$this->Form2->checkbox('pfc').'</b></div>';
-			echo '<div class="col-lg-3"><b>Record '.$this->Form2->checkbox('record').'</b></div>';
-		?>
-		</div>
 		<div style="clear: both"></div>
 		<br>
 	</div>

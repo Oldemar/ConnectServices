@@ -6,10 +6,9 @@
 	</h2>
 	<table class="table table-bordered table-hover">
 	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('sale_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('value'); ?></th>
+			<th><?php echo $this->Paginator->sort('balance'); ?></th>
 			<th><?php echo $this->Paginator->sort('advdate'); ?></th>
 			<th><?php echo $this->Paginator->sort('received'); ?></th>
 			<th><?php echo $this->Paginator->sort('bank'); ?></th>
@@ -19,14 +18,11 @@
 	</tr>
 	<?php foreach ($advances as $advance): ?>
 	<tr>
-		<td><?php echo h($advance['Advance']['id']); ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($advance['User']['username'], array('controller' => 'users', 'action' => 'view', $advance['User']['id'])); ?>
 		</td>
-		<td>
-			<?php echo $this->Html->link($advance['Sale']['id'], array('controller' => 'sales', 'action' => 'view', $advance['Sale']['id'])); ?>
-		</td>
 		<td><?php echo h($advance['Advance']['value']); ?>&nbsp;</td>
+		<td><?php echo h($advance['Advance']['balance']); ?>&nbsp;</td>
 		<td><?php echo h($advance['Advance']['advdate']); ?>&nbsp;</td>
 		<td><?php echo h($advance['Advance']['received']); ?>&nbsp;</td>
 		<td><?php echo h($advance['Advance']['bank']); ?>&nbsp;</td>

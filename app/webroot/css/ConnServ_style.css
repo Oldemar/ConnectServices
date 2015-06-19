@@ -73,3 +73,18 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+td.details-control {
+    background: url('../resources/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../resources/details_close.png') no-repeat center center;
+}
+.customer, .salesRep, .services {
+  color: #235689;
+  cursor: pointer;
+}
+
+.isInstalled {
+  text-align: center;
+}

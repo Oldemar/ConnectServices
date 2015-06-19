@@ -8,7 +8,7 @@
 				</div>
 				<div class="col-lg-8">
 				<?php
-					echo $this->Form2->input('User.region', array(
+					echo $this->Form2->input('region_id', array(
 						'label'=>false,
 						'div'=>false,
 						'id'=>'region',
@@ -67,9 +67,9 @@
 			});
 			$('.srcInput').change(function(e){
 				$.ajax({
-					url: "<? echo Router::url(array('controller'=>'sales','action'=>'allsalesAJAX')); ?>",
+					url: "<?php echo Router::url(array('controller'=>'sales','action'=>'allsalesAJAX')); ?>",
 					type : "post",
-					dataType: "Json",
+					dataType: "json",
 					data: { 
 						region: $('#region').val(), 
 						start: $('#startDate').val(), 

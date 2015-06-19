@@ -16,8 +16,7 @@
 	<div style="clear: both"></div>
 	<?php
 
-		echo $this->Form->input('saleId', array(
-			'value'=>$this->data['Advance']['sale_id'],
+		echo $this->Form->input('value', array(
 			'class'=>'form-control pull-left',
 			'style'=>'width: 250px',
 			'readonly'=>'readonly',
@@ -29,10 +28,9 @@
 	<div style="clear: both"></div>
 	<?php
 
-		echo $this->Form->input('value', array(
+		echo $this->Form->input('balance', array(
 			'class'=>'form-control pull-left',
 			'style'=>'width: 250px',
-			'readonly'=>'readonly',
 			'label'=>array(
 				'class'=>'pull-left',
 				'style'=>'width: 120px'
@@ -55,7 +53,17 @@
 	<div style="clear: both"></div>
 	<?php
 
-		echo $this->Form->input('received');
+		echo $this->Form->input('received', array(
+		'class'=>'form-control pull-left',
+		'style'=>'width: 250px',
+		'label'=>array(
+			'class'=>'pull-left',
+			'style'=>'width: 120px'
+			)));
+	?>
+	<div style="clear: both"></div>
+	<?php
+
 		echo $this->Form->input('bank', array(
 		'class'=>'form-control pull-left',
 		'style'=>'width: 250px',

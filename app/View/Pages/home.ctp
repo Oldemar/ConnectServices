@@ -1,8 +1,8 @@
-<?php
+F<?php
 if (isset($logged_in) && $logged_in) {
 ?>
 nada
-<?
+<?php
 }
 else 
 {
@@ -27,7 +27,6 @@ else
 		'label'=>false,
 		'class'=>"form-control"
 		));
-//	echo '<p>'.$this->Form->checkbox('keepmelogged'). ' Remember Me</p>';
 	echo $this->Form->input('login',array(
 		'type'=>'submit',
 		'label'=>false,
@@ -43,19 +42,7 @@ else
 	?>
 	<br clear="all"><br clear="all">
  
-	<? /*
-	echo $this->Html->link('Forgot your username?',array(
-	'action'=>'forgot_username',
-	'controller'=>'users'
-	)); 
-	?>
-	<span style="padding-left:5px;">
-	<?php 
-	echo $this->Html->link('Forgot your password?',array(
-	'action'=>'forgot_password',
-	'controller'=>'users'
-	));
-	*/
+<?php
 }
 ?>
 </p>

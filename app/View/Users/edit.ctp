@@ -12,7 +12,27 @@
 ?>
 <div style="clear: both"></div>
 <?php
+	echo $this->Form2->input('fullname', array(
+		'class'=>'form-control pull-left',
+		'style'=>'width: 250px',
+		'label'=>array(
+			'class'=>'pull-left',
+			'style'=>'width: 120px'
+			)));
+?>
+<div style="clear: both"></div>
+<?php
 	echo $this->Form2->input('email', array(
+		'class'=>'form-control pull-left',
+		'style'=>'width: 250px',
+		'label'=>array(
+			'class'=>'pull-left',
+			'style'=>'width: 120px'
+			)));
+?>
+<div style="clear: both"></div>
+<?php
+	echo $this->Form2->input('region_id', array(
 		'class'=>'form-control pull-left',
 		'style'=>'width: 250px',
 		'label'=>array(
@@ -109,6 +129,35 @@
 ?>
 <div style="clear: both"></div>
 <?php
+	echo $this->Form2->input('comission', array(
+		'class'=>'form-control pull-left',
+		'style'=>'width: 250px',
+		'label'=>array(
+			'class'=>'pull-left',
+			'style'=>'width: 120px'
+			)));
+?>
+<div style="clear: both"></div>
+<?php
+	echo $this->Form2->input('bonus', array(
+		'class'=>'form-control pull-left',
+		'style'=>'width: 250px',
+		'label'=>array(
+			'class'=>'pull-left',
+			'style'=>'width: 120px'
+			)));
+?>
+<div style="clear: both"></div>
+<?php
+	echo $this->Form2->input('saving', array(
+		'class'=>'form-control pull-left',
+		'style'=>'width: 250px',
+		'label'=>array(
+			'class'=>'pull-left',
+			'style'=>'width: 120px'
+			)));
+?>
+<?php 
 	if ($isAuthorized) {
 		echo $this->Form2->input('topleader', array(
 		'options'=>$leaders,
@@ -141,7 +190,7 @@
 	}
 ?>
 <div style="clear: both"></div>
-<?php
+<?php 
 	echo $this->Form2->button('Save', array(
 		'type'=>'submit','class'=>'pull-right btn btn-lg btn-primary')); 
 	echo $this->Form2->end(); ?>

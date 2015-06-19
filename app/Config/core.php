@@ -20,6 +20,8 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
+date_default_timezone_set('America/New_York');
+
 if(isset($_SERVER['SERVER_NAME']) && strpos($_SERVER['SERVER_NAME'], 'localhost') !==  false){
 	Configure::write('environment', 'localhost');
 } else {

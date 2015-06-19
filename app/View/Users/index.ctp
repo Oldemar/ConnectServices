@@ -7,6 +7,7 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('username'); ?></th>
 			<th><?php echo $this->Paginator->sort('email'); ?></th>
+			<th><?php echo $this->Paginator->sort('region_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('cellphone'); ?></th>
 			<th><?php echo $this->Paginator->sort('role_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('lastlogin'); ?></th>
@@ -16,6 +17,7 @@
 	<tr>
 		<td><?php echo h($user['User']['username']); ?>&nbsp;</td>
 		<td><?php echo h($user['User']['email']); ?>&nbsp;</td>
+		<td><?php echo h($user['Region']['name']); ?>&nbsp;</td>
 		<td><?php echo h($user['User']['cellphone']); ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($user['Role']['name'], array('controller' => 'roles', 'action' => 'view', $user['Role']['id'])); ?>
