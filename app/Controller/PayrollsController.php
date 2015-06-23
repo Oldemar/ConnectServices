@@ -136,15 +136,15 @@ class PayrollsController extends AppController {
 		$this->loadModel('Service');
 		$allServices = $this->Service->find('all');
 		foreach ($regions as $key => $xpto) {
-			$servicesPrices[$key]['SFU-IN'] = array();
-			$servicesPrices[$key]['SFU-OUT'] = array();
-			$servicesPrices[$key]['MDU-IN'] = array();
-			$servicesPrices[$key]['MDU-OUT'] = array();
+			$servicesPrices[$key]['SFUIN'] = array();
+			$servicesPrices[$key]['SFUOUT'] = array();
+			$servicesPrices[$key]['MDUIN'] = array();
+			$servicesPrices[$key]['MDUOUT'] = array();
 			foreach ($allServices as $keyservice => $service) {
-				$servicesPrices[$key]['SFU-IN'][$service['Service']['name']] = $service['Service']['sfu_in'];
-				$servicesPrices[$key]['SFU-OUT'][$service['Service']['name']] = $service['Service']['sfu_out'];
-				$servicesPrices[$key]['MDU-IN'][$service['Service']['name']] = $service['Service']['mdu_in'];
-				$servicesPrices[$key]['MDU-OUT'][$service['Service']['name']] = $service['Service']['mdu_in'];
+				$servicesPrices[$key]['SFUIN'][$service['Service']['name']] = $service['Service']['sfu_in'];
+				$servicesPrices[$key]['SFUOUT'][$service['Service']['name']] = $service['Service']['sfu_out'];
+				$servicesPrices[$key]['MDUIN'][$service['Service']['name']] = $service['Service']['mdu_in'];
+				$servicesPrices[$key]['MDUOUT'][$service['Service']['name']] = $service['Service']['mdu_in'];
 			}
 		}
 
@@ -180,10 +180,10 @@ class PayrollsController extends AppController {
 	            'XH 150'=>0);
 
  		$catSales = array(
-			'SFU-IN'=>array('sfuinTot'=>0,'tv'=>$tvServices,'internet'=>$netServices,'phone'=>$phServices,'xfinity_home'=>$xhServices),
-			'SFU-OUT'=>array('sfuouTot'=>0,'tv'=>$tvServices,'internet'=>$netServices,'phone'=>$phServices,'xfinity_home'=>$xhServices),	
-			'MDU-IN'=>array('mduinTot'=>0,'tv'=>$tvServices,'internet'=>$netServices,'phone'=>$phServices,'xfinity_home'=>$xhServices),	
-			'MDU-OUT'=>array('mduouTot'=>0,'tv'=>$tvServices,'internet'=>$netServices,'phone'=>$phServices,'xfinity_home'=>$xhServices)
+			'SFUIN'=>array('sfuinTot'=>0,'tv'=>$tvServices,'internet'=>$netServices,'phone'=>$phServices,'xfinity_home'=>$xhServices),
+			'SFUOUT'=>array('sfuouTot'=>0,'tv'=>$tvServices,'internet'=>$netServices,'phone'=>$phServices,'xfinity_home'=>$xhServices),	
+			'MDUIN'=>array('mduinTot'=>0,'tv'=>$tvServices,'internet'=>$netServices,'phone'=>$phServices,'xfinity_home'=>$xhServices),	
+			'MDUOUT'=>array('mduouTot'=>0,'tv'=>$tvServices,'internet'=>$netServices,'phone'=>$phServices,'xfinity_home'=>$xhServices)
 			);
 
 		$this->loadModel('Sale');
@@ -213,308 +213,185 @@ class PayrollsController extends AppController {
 		}
 		$conditions = array('Sale.comissioned' => 0,'Sale.installed' => 1,$cond1,$cond2,$cond3,$cond4);
 
+		$comissionByUserTemp = array();
 		$comissionByUser = array();
-		$comissionByUser1 = array();
 
 		$salesforpayroll = $this->Sale->find('all', array('conditions'=>$conditions));
 
 		foreach ($salesforpayroll as $key => $sale) {
-			if (!isset($comissionByUser[$sale['User']['id']])) {
-				$comissionByUser[$sale['User']['id']] = $catSales;
-				$comissionByUser[$sale['User']['id']]['userTot'] = 0;
-				$comissionByUser[$sale['User']['id']]['name'] = $sale['User']['fullname'];
+			if (!isset($comissionByUserTemp[$sale['User']['id']])) {
+				$comissionByUserTemp[$sale['User']['id']] = $catSales;
+				$comissionByUserTemp[$sale['User']['id']]['userTot'] = 0;
 			}
 			switch ($sale['Sale']['category']) {
 				case 'SFU-IN':
 					if ($sale['Sale']['tv'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-IN'][$sale['Sale']['tv']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUIN'][$sale['Sale']['tv']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-IN']['tv'][$sale['Sale']['tv']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-IN']['tv']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['tv'][$sale['Sale']['tv']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['tv']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['sfuinTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					if ($sale['Sale']['internet'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-IN'][$sale['Sale']['internet']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUIN'][$sale['Sale']['internet']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-IN']['internet'][$sale['Sale']['internet']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-IN']['internet']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['internet'][$sale['Sale']['internet']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['internet']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['sfuinTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					if ($sale['Sale']['phone'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-IN'][$sale['Sale']['phone']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUIN'][$sale['Sale']['phone']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-IN']['phone'][$sale['Sale']['phone']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-IN']['phone']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['phone'][$sale['Sale']['phone']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['phone']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['sfuinTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					if ($sale['Sale']['xfinity_home'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-IN'][$sale['Sale']['xfinity_home']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUIN'][$sale['Sale']['xfinity_home']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-IN']['xfinity_home'][$sale['Sale']['xfinity_home']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-IN']['xfinity_home']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['xfinity_home'][$sale['Sale']['xfinity_home']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['xfinity_home']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['sfuinTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					break;
 				case 'SFU-OUT':
 					if ($sale['Sale']['tv'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-OUT'][$sale['Sale']['tv']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUOUT'][$sale['Sale']['tv']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-OUT']['tv'][$sale['Sale']['tv']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-OUT']['tv']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-OUT']['sfuouTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['tv'][$sale['Sale']['tv']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['tv']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['sfuouTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					if ($sale['Sale']['internet'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-OUT'][$sale['Sale']['internet']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUOUT'][$sale['Sale']['internet']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-OUT']['internet'][$sale['Sale']['internet']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-OUT']['internet']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-OUT']['sfuouTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['internet'][$sale['Sale']['internet']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['internet']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['sfuouTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					if ($sale['Sale']['phone'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-OUT'][$sale['Sale']['phone']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUOUT'][$sale['Sale']['phone']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-OUT']['phone'][$sale['Sale']['phone']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-OUT']['phone']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-OUT']['sfuouTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['phone'][$sale['Sale']['phone']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['phone']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['sfuouTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					if ($sale['Sale']['xfinity_home'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-OUT'][$sale['Sale']['xfinity_home']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUOUT'][$sale['Sale']['xfinity_home']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-OUT']['xfinity_home'][$sale['Sale']['xfinity_home']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-OUT']['xfinity_home']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['SFU-OUT']['sfuouTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['xfinity_home'][$sale['Sale']['xfinity_home']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['xfinity_home']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['sfuouTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
-					$comissionByUser[$sale['Sale']['user_id']]['SFU-OUT']['sfuouTot'] += 1;
-					$comissionByUser[$sale['Sale']['user_id']]['userTot'] += 1;
+					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['sfuouTot'] += 1;
+					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += 1;
 					break;
 				case 'MDU-IN':
 					if ($sale['Sale']['tv'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-IN'][$sale['Sale']['tv']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUIN'][$sale['Sale']['tv']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-IN']['tv'][$sale['Sale']['tv']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-IN']['tv']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['tv'][$sale['Sale']['tv']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['tv']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['sfuinTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					if ($sale['Sale']['internet'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-IN'][$sale['Sale']['internet']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUIN'][$sale['Sale']['internet']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-IN']['internet'][$sale['Sale']['internet']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-IN']['internet']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['internet'][$sale['Sale']['internet']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['internet']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['sfuinTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					if ($sale['Sale']['phone'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-IN'][$sale['Sale']['phone']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUIN'][$sale['Sale']['phone']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-IN']['phone'][$sale['Sale']['phone']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-IN']['phone']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['phone'][$sale['Sale']['phone']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['phone']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['sfuinTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					if ($sale['Sale']['xfinity_home'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-IN'][$sale['Sale']['xfinity_home']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUIN'][$sale['Sale']['xfinity_home']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-IN']['xfinity_home'][$sale['Sale']['xfinity_home']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-IN']['xfinity_home']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['xfinity_home'][$sale['Sale']['xfinity_home']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['xfinity_home']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['sfuinTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					break;
 				case 'MDU-OUT':
 					if ($sale['Sale']['tv'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-OUT'][$sale['Sale']['tv']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUOUT'][$sale['Sale']['tv']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-OUT']['tv'][$sale['Sale']['tv']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-OUT']['tv']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-OUT']['sfuinTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['tv'][$sale['Sale']['tv']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['tv']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['sfuinTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					if ($sale['Sale']['internet'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-OUT'][$sale['Sale']['internet']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUOUT'][$sale['Sale']['internet']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-OUT']['internet'][$sale['Sale']['internet']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-OUT']['internet']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-OUT']['sfuinTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['internet'][$sale['Sale']['internet']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['internet']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['sfuinTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					if ($sale['Sale']['phone'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-OUT'][$sale['Sale']['phone']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUOUT'][$sale['Sale']['phone']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-OUT']['phone'][$sale['Sale']['phone']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-OUT']['phone']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-OUT']['sfuinTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['phone'][$sale['Sale']['phone']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['phone']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['sfuinTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					if ($sale['Sale']['xfinity_home'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-OUT'][$sale['Sale']['xfinity_home']] *
+						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUOUT'][$sale['Sale']['xfinity_home']] *
 									$sale['User']['comission']) / 100 );
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-OUT']['xfinity_home'][$sale['Sale']['xfinity_home']] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-OUT']['xfinity_home']['Total'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['MDU-OUT']['sfuinTot'] += $comiss;
-						$comissionByUser[$sale['Sale']['user_id']]['userTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['xfinity_home'][$sale['Sale']['xfinity_home']] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['xfinity_home']['Total'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['sfuinTot'] += $comiss;
+						$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					}
 					break;
 			}
 
-		}
-		foreach ($salesforpayroll as $key => $sale) {
-			if (!isset($comissionByUser1[$sale['User']['id']])) {
-				$comissionByUser1[$sale['User']['id']] = $catSales;
-				$comissionByUser1[$sale['User']['id']]['userTot'] = 0;
-				$comissionByUser1[$sale['User']['id']]['name'] = $sale['User']['fullname'];
-			}
-			switch ($sale['Sale']['category']) {
-				case 'SFU-IN':
-					if ($sale['Sale']['tv'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-IN'][$sale['Sale']['tv']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-IN']['tv'][$sale['Sale']['tv']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-IN']['tv']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					if ($sale['Sale']['internet'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-IN'][$sale['Sale']['internet']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-IN']['internet'][$sale['Sale']['internet']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-IN']['internet']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					if ($sale['Sale']['phone'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-IN'][$sale['Sale']['phone']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-IN']['phone'][$sale['Sale']['phone']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-IN']['phone']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					if ($sale['Sale']['xfinity_home'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-IN'][$sale['Sale']['xfinity_home']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-IN']['xfinity_home'][$sale['Sale']['xfinity_home']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-IN']['xfinity_home']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					break;
-				case 'SFU-OUT':
-					if ($sale['Sale']['tv'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-OUT'][$sale['Sale']['tv']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-OUT']['tv'][$sale['Sale']['tv']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-OUT']['tv']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-OUT']['sfuouTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					if ($sale['Sale']['internet'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-OUT'][$sale['Sale']['internet']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-OUT']['internet'][$sale['Sale']['internet']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-OUT']['internet']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-OUT']['sfuouTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					if ($sale['Sale']['phone'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-OUT'][$sale['Sale']['phone']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-OUT']['phone'][$sale['Sale']['phone']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-OUT']['phone']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-OUT']['sfuouTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					if ($sale['Sale']['xfinity_home'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFU-OUT'][$sale['Sale']['xfinity_home']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-OUT']['xfinity_home'][$sale['Sale']['xfinity_home']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-OUT']['xfinity_home']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['SFU-OUT']['sfuouTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					$comissionByUser1[$sale['Sale']['user_id']]['SFU-OUT']['sfuouTot'] += 1;
-					$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += 1;
-					break;
-				case 'MDU-IN':
-					if ($sale['Sale']['tv'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-IN'][$sale['Sale']['tv']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-IN']['tv'][$sale['Sale']['tv']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-IN']['tv']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					if ($sale['Sale']['internet'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-IN'][$sale['Sale']['internet']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-IN']['internet'][$sale['Sale']['internet']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-IN']['internet']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					if ($sale['Sale']['phone'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-IN'][$sale['Sale']['phone']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-IN']['phone'][$sale['Sale']['phone']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-IN']['phone']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					if ($sale['Sale']['xfinity_home'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-IN'][$sale['Sale']['xfinity_home']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-IN']['xfinity_home'][$sale['Sale']['xfinity_home']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-IN']['xfinity_home']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-IN']['sfuinTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					break;
-				case 'MDU-OUT':
-					if ($sale['Sale']['tv'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-OUT'][$sale['Sale']['tv']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-OUT']['tv'][$sale['Sale']['tv']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-OUT']['tv']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-OUT']['sfuinTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					if ($sale['Sale']['internet'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-OUT'][$sale['Sale']['internet']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-OUT']['internet'][$sale['Sale']['internet']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-OUT']['internet']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-OUT']['sfuinTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					if ($sale['Sale']['phone'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-OUT'][$sale['Sale']['phone']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-OUT']['phone'][$sale['Sale']['phone']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-OUT']['phone']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-OUT']['sfuinTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					if ($sale['Sale']['xfinity_home'] != 'Not Purchased') {
-						$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDU-OUT'][$sale['Sale']['xfinity_home']] *
-									$sale['User']['comission']) / 100 );
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-OUT']['xfinity_home'][$sale['Sale']['xfinity_home']] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-OUT']['xfinity_home']['Total'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['MDU-OUT']['sfuinTot'] += $comiss;
-						$comissionByUser1[$sale['Sale']['user_id']]['userTot'] += $comiss;
-					}
-					break;
-			}
+			$comissionByUserTemp[$sale['Sale']['user_id']]['subtotal'] = 
+				$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] + $sale['User']['bonus'];
 
+			$comissionByUserTemp[$sale['Sale']['user_id']]['savings'] = 
+				$comissionByUserTemp[$sale['Sale']['user_id']]['subtotal'] * 
+					( $sale['User']['saving'] / 100 );
 		}
-		
+
+		$this->loadModel('User');
+		$this->loadModel('Advance');
+		$thisKey = 0;
+		foreach ($comissionByUserTemp as $key => $comissions) {
+			$comissionByUser[$thisKey] = $comissions;
+			$xpto = $this->User->find('first',array('conditions'=>array('User.id'=>$key)));
+			$comissionByUser[$thisKey]['User'] = $xpto['User'];
+			if (!count($xpto['Advance'])-1 < 0)
+				$comissionByUser[$thisKey]['Advance'] = $xpto['Advance'][count($xpto['Advance'])-1];
+			else
+				$comissionByUser[$thisKey]['Advance']['balance'] = 0;
+			if (!count($xpto['Saving'])-1 < 0)
+				$comissionByUser[$thisKey]['Advance'] = $xpto['Advance'][count($xpto['Advance'])-1];
+			else
+				$comissionByUser[$thisKey]['Advance']['balance'] = 0;
+			$comissionByUser[$thisKey]['totaldue'] = 
+				$comissions['subtotal'] - $comissions['savings'] - $comissions['savings'];
+			$thisKey++;
+		}
+
 		$arrReturn['data'] = $comissionByUser;
 		echo json_encode($arrReturn);
 		exit;

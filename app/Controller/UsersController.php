@@ -10,6 +10,7 @@ App::uses('CakeTime', 'Utility');
 class UsersController extends AppController {
 
 	public $helpers = array('GoogleCharts.GoogleCharts');
+	public $isAuthorized; 
 
 /**
 *

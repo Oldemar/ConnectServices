@@ -31,10 +31,11 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 
 	<link type="text/css" rel="stylesheet" href="<?php echo $this->webroot; ?>bootstrap/css/bootstrap.css">
 	<link href="<?php echo $this->webroot ; ?>bootstrap/css/bootstrap-glyphicons.css" rel="stylesheet">
+	<link href="<?php echo $this->webroot ; ?>js/jquery-ui-1.11.4/jquery-ui.css" rel="stylesheet">
 
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<script src="<?php echo $this->webroot ; ?>js/jquery-ui-1.11.4/jquery-ui.js"></script>
 	<!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
@@ -65,22 +66,43 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 						<span class="icon-bar"></span>
 					</button>
 					<?php
-						if (isset($logged_in) && $logged_in) {
-							echo $this->Html->link( $cakeDescription, array('controller'=>'users', 'action'=>'dashboard'), array('class'=>'navbar-brand')) ;
+					if (isset($logged_in) && $logged_in) {
+						echo $this->Html->link( $cakeDescription, array('controller'=>'users', 'action'=>'dashboard'), array('class'=>'navbar-brand')) ;
 					?>
 					<ul class="nav navbar-nav">
 						<li>
 							<?php echo $this->Html->link('Dashboard', array('controller'=>'users', 'action'=>'dashboard')); ?>
 						</li>
-						<?php
-						if (in_array(Authcomponent::User('role_id'), array('1','2','4','8'))) {
-						?>
-						<?php
-						}
-						if($isAuthorized) {
-						?>
-						<li>
-							<?php echo $this->Html->link('Payroll Generator', array('controller'=>'payrolls', 'action'=>'listsales')); ?>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								Payroll
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<?php
+								if($isAuthorized) {
+								?>
+								<li>
+									<?php echo $this->Html->link('Prepare', array('controller'=>'payrolls', 'action'=>'listsales')); ?>
+								</li>
+								<li>
+									<?php echo $this->Html->link('List', array('controller'=>'payrolls', 'action'=>'index')); ?>
+								</li>
+								<?php
+								} else {
+									if ( in_array($objLoggedUser->getAttr('role_id'), array('5', '6')) )
+									{
+								?>
+								<li>
+									<?php
+										echo $this->Html->link('My Payrolls', array('controller'=>'payrolls', 'action'=>'index'));
+									?>
+								</li>
+								<?php
+									}
+								}
+								?>
+							</ul>
 						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -149,7 +171,6 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 							</ul>
 						</li>
 						<?php
-						}
 						if (Authcomponent::User('role_id') !='7') {						?>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -182,24 +203,8 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 									}
 								?>
 								</li>
-								<?php
-								if ($objLoggedUser->getAttr('role_id') != '2')
-								{
-								?>
-								<li>
-									<?php 
-									if (in_array($objLoggedUser->getAttr('role_id'), array('5','6'))) 
-										echo $this->Html->link('My PayRoll', '#'); 
-									?>
-								</li>
-								<?php
-								}
-								?>
 							</ul>
 						</li>
-						<?php
-						}
-						?>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								Agenda<b class="caret"></b>
@@ -233,7 +238,8 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 						</li>
 					</ul>
 					<?php
-					} 
+						}
+					}
 					else 
 					{
 						echo $this->Html->link( $cakeDescription, '/', array('class'=>'navbar-brand')) ;

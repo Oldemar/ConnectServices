@@ -128,21 +128,21 @@
 				e.preventDefault();
 			});
 			$('#btnPreview').click(function(e){
+				subtotalInfo = $('#subtotalInfo');
 				var varTable = $('#salesTable').DataTable();
 					varTable.destroy();
+				td1 = "";
 				$('#salesTable').empty();
 				$('.btnVisible').toggle();
 				$('salesTable').hide();
 				$('#previewPayrollTable').show();
 				var payrollTable = $('#previewPayrollTable').DataTable({
 					'destroy': true,
-					'empty': true,
 					'ajax': 
 						{
 							'url': "<?php echo Router::url(array('controller'=>'payrolls','action'=>'previewpayrollAJAX')); ?>",
 							'type': 'POST',
 							'dataType': 'json',
-
 							'data': 
 								{ 
 									'regionID': $('#regionID').val(), 
@@ -153,14 +153,95 @@
 						},
 					'columns':
 						[
-							{'data':'name'},
-							{'data':'SFU-IN.Total'},
-							{'data':'SFU-OUT.Total'},
-							{'data':'MDU-IN.Total'},
-							{'data':'MDU-OUT.Total'}
+							{'data': 'User.fullname'},
+							{
+								'data': 'SFUIN.sfuinTot',
+								'className':'SFUIN'
+							},
+							{
+								'data': 'SFUOUT.sfuouTot',
+								'className':'SFUOUT'
+							},
+							{
+								'data': 'MDUIN.mduinTot',
+								'className':'MDUIN'
+							},
+							{
+								'data': 'MDUOUT.mduouTot',
+								'className':'MDUOUT'
+							},
+							{'data': 'User.bonus' },
+							{'data': 'subtotal' },
+							{'data': 'savings' },
+							{'data': 'Advance.balance' },
+							{'data': 'totaldue' }
 						]
 				});
-				e.preventDefault();
+
+			    $('#previewPayrollTable tbody').on('click', 'td.SFUIN', function () {
+			        var tr = $(this).closest('tr');
+			        var row4 = payrollTable.row( tr );
+			        if ( row4.child.isShown() ) {
+			            row4.child.hide();
+			            tr.removeClass('shown');
+			            if (tr.context.classList[0] != td1) {
+				            row4.child( formatSFUIN(row4.data()) ).show();
+				            tr.addClass('shown');
+			            }
+			        } else {
+			            row4.child( formatSFUIN(row4.data()) ).show();
+			            tr.addClass('shown');
+			        }
+			    	td1 = 'SFUIN';
+			    } );
+			    $('#previewPayrollTable tbody').on('click', 'td.SFUOUT', function () {
+			        var tr = $(this).closest('tr');
+			        var row5 = payrollTable.row( tr );
+			        if ( row5.child.isShown() ) {
+			            row5.child.hide();
+			            tr.removeClass('shown');
+			            if (tr.context.classList[0] != td1) {
+				            row5.child( formatSFUOUT(row5.data()) ).show();
+				            tr.addClass('shown');
+			            }
+			        } else {
+			            row5.child( formatSFUOUT(row5.data()) ).show();
+			            tr.addClass('shown');
+			        }
+			    	td1 = 'SFUOUT';
+			    } );
+			    $('#previewPayrollTable tbody').on('click', 'td.MDUIN', function () {
+			        var tr = $(this).closest('tr');
+			        var row6 = payrollTable.row( tr );
+			        if ( row6.child.isShown() ) {
+			            row6.child.hide();
+			            tr.removeClass('shown');
+			            if (tr.context.classList[0] != td1) {
+				            row6.child( formatMDUIN(row6.data()) ).show();
+				            tr.addClass('shown');
+			            }
+			        } else {
+			            row6.child( formatMDUIN(row6.data()) ).show();
+			            tr.addClass('shown');
+			        }
+			    	td1 = 'MDUIN';
+			    } );
+			    $('#previewPayrollTable tbody').on('click', 'td.MDUOUT', function () {
+			        var tr = $(this).closest('tr');
+			        var row7 = payrollTable.row( tr );
+			        if ( row7.child.isShown() ) {
+			            row7.child.hide();
+			            tr.removeClass('shown');
+			            if (tr.context.classList[0] != td1) {
+				            row7.child( formatMDUOUT(row7.data()) ).show();
+				            tr.addClass('shown');
+			            }
+			        } else {
+			            row7.child( formatMDUOUT(row7.data()) ).show();
+			            tr.addClass('shown');
+			        }
+			    	td1 = 'MDUOUT';
+			    } );
 			});
 			function listSales() {
 				varUserInfo = $('#userInfo');
@@ -171,7 +252,6 @@
 				$('#salesTable').empty()
 				var salesTable = $('#salesTable').show().DataTable({
 					'destroy': true,
-					'empty': true,
 					'ajax': 
 						{
 							'url': "<?php echo Router::url(array('controller'=>'payrolls','action'=>'listsalesAJAX')); ?>",
@@ -350,6 +430,82 @@
 				varSaleInfo.find('#extras').html('TBD')
 				return varSaleInfo;
 			}
+			function formatSFUIN(d) {
+				subtotalInfo.find('#catTitle').html('SFU-IN');
+				subtotalInfo.find('#basictv').html(d.SFUIN.tv['Basic TV']);
+				subtotalInfo.find('#economytv').html(d.SFUIN.tv['Economy TV']);
+				subtotalInfo.find('#startertv').html(d.SFUIN.tv['Starter TV']);
+				subtotalInfo.find('#preferredtv').html(d.SFUIN.tv['Preferred TV']);
+				subtotalInfo.find('#premiertv').html(d.SFUIN.tv['Premier TV']);
+				subtotalInfo.find('#economynet').html(d.SFUIN.internet['Economy Internet']);
+				subtotalInfo.find('#performancenet').html(d.SFUIN.internet['Performance Internet']);
+				subtotalInfo.find('#blastnet').html(d.SFUIN.internet['Blast Internet']);
+				subtotalInfo.find('#extremenet').html(d.SFUIN.internet['Extreme Internet']);
+				subtotalInfo.find('#localphone').html(d.SFUIN.phone['Local Phone']);
+				subtotalInfo.find('#unlimitedphone').html(d.SFUIN.phone['Unlimited Phone']);
+				subtotalInfo.find('#xf300').html(d.SFUIN.xfinity_home['XH 300']);
+				subtotalInfo.find('#xf350').html(d.SFUIN.xfinity_home['XH 350']);
+				subtotalInfo.find('#xf100').html(d.SFUIN.xfinity_home['XH 100']);
+				subtotalInfo.find('#xf150').html(d.SFUIN.xfinity_home['XH 150']);
+				return subtotalInfo;
+			}
+			function formatSFUOUT(d) {
+				subtotalInfo.find('#catTitle').html('SFU-OUT');
+				subtotalInfo.find('#basictv').html(d.SFUOUT.tv['Basic TV']);
+				subtotalInfo.find('#economytv').html(d.SFUOUT.tv['Economy TV']);
+				subtotalInfo.find('#startertv').html(d.SFUOUT.tv['Starter TV']);
+				subtotalInfo.find('#preferredtv').html(d.SFUOUT.tv['Preferred TV']);
+				subtotalInfo.find('#premiertv').html(d.SFUOUT.tv['Premier TV']);
+				subtotalInfo.find('#economynet').html(d.SFUOUT.internet['Economy Internet']);
+				subtotalInfo.find('#performancenet').html(d.SFUOUT.internet['Performance Internet']);
+				subtotalInfo.find('#blastnet').html(d.SFUOUT.internet['Blast Internet']);
+				subtotalInfo.find('#extremenet').html(d.SFUOUT.internet['Extreme Internet']);
+				subtotalInfo.find('#localphone').html(d.SFUOUT.phone['Local Phone']);
+				subtotalInfo.find('#unlimitedphone').html(d.SFUOUT.phone['Unlimited Phone']);
+				subtotalInfo.find('#xf300').html(d.SFUOUT.xfinity_home['XH 300']);
+				subtotalInfo.find('#xf350').html(d.SFUOUT.xfinity_home['XH 350']);
+				subtotalInfo.find('#xf100').html(d.SFUOUT.xfinity_home['XH 100']);
+				subtotalInfo.find('#xf150').html(d.SFUOUT.xfinity_home['XH 150']);
+				return subtotalInfo;
+			}
+			function formatMDUIN(d) {
+				subtotalInfo.find('#catTitle').html('MDU-IN');
+				subtotalInfo.find('#basictv').html(d.MDUIN.tv['Basic TV']);
+				subtotalInfo.find('#economytv').html(d.MDUIN.tv['Economy TV']);
+				subtotalInfo.find('#startertv').html(d.MDUIN.tv['Starter TV']);
+				subtotalInfo.find('#preferredtv').html(d.MDUIN.tv['Preferred TV']);
+				subtotalInfo.find('#premiertv').html(d.MDUIN.tv['Premier TV']);
+				subtotalInfo.find('#economynet').html(d.MDUIN.internet['Economy Internet']);
+				subtotalInfo.find('#performancenet').html(d.MDUIN.internet['Performance Internet']);
+				subtotalInfo.find('#blastnet').html(d.MDUIN.internet['Blast Internet']);
+				subtotalInfo.find('#extremenet').html(d.MDUIN.internet['Extreme Internet']);
+				subtotalInfo.find('#localphone').html(d.MDUIN.phone['Local Phone']);
+				subtotalInfo.find('#unlimitedphone').html(d.MDUIN.phone['Unlimited Phone']);
+				subtotalInfo.find('#xf300').html(d.MDUIN.xfinity_home['XH 300']);
+				subtotalInfo.find('#xf350').html(d.MDUIN.xfinity_home['XH 350']);
+				subtotalInfo.find('#xf100').html(d.MDUIN.xfinity_home['XH 100']);
+				subtotalInfo.find('#xf150').html(d.MDUIN.xfinity_home['XH 150']);
+				return subtotalInfo;
+			}
+			function formatMDUOUT(d) {
+				subtotalInfo.find('#catTitle').html('MDU-OUT');
+				subtotalInfo.find('#basictv').html(d.MDUOUT.tv['Basic TV']);
+				subtotalInfo.find('#economytv').html(d.MDUOUT.tv['Economy TV']);
+				subtotalInfo.find('#startertv').html(d.MDUOUT.tv['Starter TV']);
+				subtotalInfo.find('#preferredtv').html(d.MDUOUT.tv['Preferred TV']);
+				subtotalInfo.find('#premiertv').html(d.MDUOUT.tv['Premier TV']);
+				subtotalInfo.find('#economynet').html(d.MDUOUT.internet['Economy Internet']);
+				subtotalInfo.find('#performancenet').html(d.MDUOUT.internet['Performance Internet']);
+				subtotalInfo.find('#blastnet').html(d.MDUOUT.internet['Blast Internet']);
+				subtotalInfo.find('#extremenet').html(d.MDUOUT.internet['Extreme Internet']);
+				subtotalInfo.find('#localphone').html(d.MDUOUT.phone['Local Phone']);
+				subtotalInfo.find('#unlimitedphone').html(d.MDUOUT.phone['Unlimited Phone']);
+				subtotalInfo.find('#xf300').html(d.MDUOUT.xfinity_home['XH 300']);
+				subtotalInfo.find('#xf350').html(d.MDUOUT.xfinity_home['XH 350']);
+				subtotalInfo.find('#xf100').html(d.MDUOUT.xfinity_home['XH 100']);
+				subtotalInfo.find('#xf150').html(d.MDUOUT.xfinity_home['XH 150']);
+				return subtotalInfo;
+			}
 	  	</script>
 	</div>
 		<table id="salesTable" class="table table-bordered table-hover" style="display: none">
@@ -369,12 +525,13 @@
 	        <thead>
 	            <tr>
 	                <th>Sales Rep</th>
-	                <th>SFU_IN</th>
+	                <th>SFU-IN</th>
 	                <th>SFU-OUT</th>
 	                <th>MDU-IN</th>
 	                <th>MDU-OUT</th>
-	                <th>Sub Total</th>
 	                <th>Bonus</th>
+	                <th>Sub Total</th>
+	                <th>Saving</th>
 	                <th>Advances</th>
 	                <th>Total Due</th>
 	            </tr>
@@ -624,4 +781,138 @@
 	   			</div>
 	   		</div>
 	   	</div>
+	</div>
+	<div style="display: none;">
+		<div id="subtotalInfo" class="well">
+			<div>
+				<h4 id="catTitle"></h4>
+			</div>
+	   		<div class="row">
+	   			<div class="col-lg-3">
+	   				<h5>TV</h5>
+	   				<table>
+	   					<tr>
+	   						<td style="width:40">
+	   							Basic: 
+	   						</td>
+	   						<td id="basictv" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   					<tr>
+	   						<td>
+	   							Economy: 
+	   						</td>
+	   						<td id="economytv" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   					<tr>
+	   						<td>
+	   							Starter: 
+	   						</td>
+	   						<td id="startertv" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   					<tr>
+	   						<td>
+	   							Preferred: 
+	   						</td>
+	   						<td id="preferredtv" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   					<tr>
+	   						<td>
+	   							Premier: 
+	   						</td>
+	   						<td id="premiertv" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   				</table>
+	   			</div>
+	   			<div class="col-lg-3">
+	   				<h5>Internet</h5>
+	   				<table>
+	   					<tr>
+	   						<td style="width:40">
+	   							Economy Internet: 
+	   						</td>
+	   						<td id="economynet" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   					<tr>
+	   						<td>
+	   							Performance Internet: 
+	   						</td>
+	   						<td id="performancenet" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   					<tr>
+	   						<td>
+	   							Blast Internet: 
+	   						</td>
+	   						<td id="blastnet" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   					<tr>
+	   						<td>
+	   							Extreme Internet: 
+	   						</td>
+	   						<td id="extremenet" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   				</table>
+	   			</div>
+	   			<div class="col-lg-3">
+	   				<h5>PHONE</h5>
+	   				<table>
+	   					<tr>
+	   						<td style="width:40">
+	   							Local: 
+	   						</td>
+	   						<td id="localphone" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   					<tr>
+	   						<td>
+	   							Economy: 
+	   						</td>
+	   						<td id="unlimitedphone" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   				</table>
+	   			</div>
+	   			<div class="col-lg-3">
+	   				<h5>Xfinity Home</h5>
+	   				<table>
+	   					<tr>
+	   						<td style="width:40">
+	   							XF 300: 
+	   						</td>
+	   						<td id="xf300" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   					<tr>
+	   						<td>
+	   							XF 350: 
+	   						</td>
+	   						<td id="xf350" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   					<tr>
+	   						<td>
+	   							XF 100: 
+	   						</td>
+	   						<td id="xf100" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   					<tr>
+	   						<td>
+	   							XF 150: 
+	   						</td>
+	   						<td id="xf150" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+	   				</table>
+	   			</div>
+	   		</div>			
+		</div>
 	</div>

@@ -1,4 +1,4 @@
-F<?php
+<?php
 if (isset($logged_in) && $logged_in) {
 ?>
 nada

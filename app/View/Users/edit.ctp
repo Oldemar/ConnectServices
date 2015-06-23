@@ -129,47 +129,39 @@
 ?>
 <div style="clear: both"></div>
 <?php
-	echo $this->Form2->input('comission', array(
-		'class'=>'form-control pull-left',
-		'style'=>'width: 250px',
-		'label'=>array(
-			'class'=>'pull-left',
-			'style'=>'width: 120px'
-			)));
+	if ($isAuthorized) {
+		echo $this->Form2->input('comission', array(
+			'value'=>25,
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
 ?>
 <div style="clear: both"></div>
 <?php
-	echo $this->Form2->input('bonus', array(
-		'class'=>'form-control pull-left',
-		'style'=>'width: 250px',
-		'label'=>array(
-			'class'=>'pull-left',
-			'style'=>'width: 120px'
-			)));
+		echo $this->Form2->input('bonus', array(
+			'value'=>0,
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
 ?>
 <div style="clear: both"></div>
 <?php
-	echo $this->Form2->input('saving', array(
-		'class'=>'form-control pull-left',
-		'style'=>'width: 250px',
-		'label'=>array(
-			'class'=>'pull-left',
-			'style'=>'width: 120px'
-			)));
+		echo $this->Form2->input('saving', array(
+			'value'=>10,
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
 ?>
 <?php 
-	if ($isAuthorized) {
-		echo $this->Form2->input('topleader', array(
-		'options'=>$leaders,
-		'class'=>'form-control pull-left',
-		'style'=>'width: 250px',
-		'label'=>array(
-			'class'=>'pull-left',
-			'style'=>'width: 120px'
-			)));
-?>
-<div style="clear: both"></div>
-<?php
 		echo $this->Form2->input('role_id', array(
 		'class'=>'form-control pull-left',
 		'style'=>'width: 250px',
@@ -180,17 +172,17 @@
 ?>
 <div style="clear: both"></div>
 <?php
-		echo $this->Form2->input('parent_id', array(
-		'class'=>'form-control pull-left',
-		'style'=>'width: 250px',
-		'label'=>array(
-			'class'=>'pull-left',
-			'style'=>'width: 120px'
-			)));
 	}
-?>
-<div style="clear: both"></div>
-<?php 
+	else
+	{
+		echo $this->Form2->input('role_id', array(
+			'type'=>'hidden',
+			'value'=>'7'));
+	}
+	echo $this->Form2->input('parent_id', array(
+		'type'=>'hidden',
+		'value'=>'2'));
 	echo $this->Form2->button('Save', array(
 		'type'=>'submit','class'=>'pull-right btn btn-lg btn-primary')); 
-	echo $this->Form2->end(); ?>
+	echo $this->Form2->end(); 
+?>
