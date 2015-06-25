@@ -1,28 +1,44 @@
-<?php
-//	echo '<pre>'.print_r($servicesPrices,true).'</pre>';
-?>
 <script src="http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+<script src="<?php echo $this->webroot; ?>js/accounting.js"></script>
 	<div class="row" id="payrollHeader">
 		<div class="col-lg-6">
 			<h2>Not comissioned Sales</h2>
 		</div>
-		<div class="col-lg-6 text-right" id="previewLink">
-		<?php
-			echo $this->Form2->button('Preview', array(
-					'type'=>'button',
-					'class'=>'btn btn-lg btn-primary btnVisible',
-					'style'=>'color: black; font-weigth:bold',
-					'id'=>'btnPreview'
-				));
+		<div class="col-lg-6 text-right">
+			<div class="row">
+				<div class="col-lg-6">
+					
+				</div>
+				<div class="col-lg-3">
+				<?php
+					echo $this->Form2->button('Back', array(
+							'type'=>'button',
+							'class'=>'btn btn-lg btn-primary btnVisible',
+							'style'=>'color: black; font-weigth:bold',
+							'id'=>'btnBack',
+							'style'=>'display: none'
+						));
+				?>
+				</div>
+				<div class="col-lg-3">
+				<?php
+					echo $this->Form2->button('Preview', array(
+							'type'=>'button',
+							'class'=>'btn btn-lg btn-primary btnVisible',
+							'style'=>'color: black; font-weigth:bold',
+							'id'=>'btnPreview'
+						));
 
-			echo $this->Form2->button('Back', array(
-					'type'=>'button',
-					'class'=>'btn btn-lg btn-primary btnVisible',
-					'style'=>'color: black; font-weigth:bold',
-					'id'=>'btnBack',
-					'style'=>'display: none'
-				));
-		?>
+					echo $this->Form2->button('Generate', array(
+							'type'=>'button',
+							'class'=>'btn btn-lg btn-primary btnVisible',
+							'style'=>'color: black; font-weigth:bold',
+							'id'=>'btnGenerate',
+							'style'=>'display: none'
+						));
+				?>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -118,7 +134,7 @@
 			});
 			$('.srcInput').change(function(e){
 				$('#btnPreview').show();
-				$('#btnBack').hide();
+				$('#btnBack, #btnGenerate').hide();
 				listSales();
 				e.preventDefault();
 			});
@@ -156,25 +172,81 @@
 							{'data': 'User.fullname'},
 							{
 								'data': 'SFUIN.sfuinTot',
-								'className':'SFUIN'
+								'render': function(d)
+									{
+										return accounting.formatMoney(d);
+									},
+								'className':'SFUIN text-right'
 							},
 							{
 								'data': 'SFUOUT.sfuouTot',
-								'className':'SFUOUT'
+								'render': function(d)
+									{
+										return accounting.formatMoney(d);
+									},
+								'className':'SFUOUT text-right'
 							},
 							{
 								'data': 'MDUIN.mduinTot',
-								'className':'MDUIN'
+								'render': function(d)
+									{
+										return accounting.formatMoney(d);
+									},
+								'className':'MDUIN text-right'
 							},
 							{
 								'data': 'MDUOUT.mduouTot',
-								'className':'MDUOUT'
+								'render': function(d)
+									{
+										return accounting.formatMoney(d);
+									},
+								'className':'MDUOUT text-right'
 							},
-							{'data': 'User.bonus' },
-							{'data': 'subtotal' },
-							{'data': 'savings' },
-							{'data': 'Advance.balance' },
-							{'data': 'totaldue' }
+							{
+								'data': 'User.bonus',
+								'render': function(d)
+									{
+										return accounting.formatMoney(d);
+									},
+								'className':'text-right'
+
+							},
+							{
+								'data': 'subtotal',
+								'render': function(d)
+									{
+										return accounting.formatMoney(d);
+									},
+								'className':'text-right'
+
+							},
+							{
+								'data': 'savings',
+								'render': function(d)
+									{
+										return accounting.formatMoney(d);
+									},
+								'className':'text-right'
+
+							},
+							{
+								'data': 'Advance.balance',
+								'render': function(d)
+									{
+										return accounting.formatMoney(d);
+									},
+								'className':'text-right'
+
+							},
+							{
+								'data': 'totaldue',
+								'render': function(d)
+									{
+										return accounting.formatMoney(d);
+									},
+								'className':'text-right'
+
+								 }
 						]
 				});
 
@@ -432,21 +504,21 @@
 			}
 			function formatSFUIN(d) {
 				subtotalInfo.find('#catTitle').html('SFU-IN');
-				subtotalInfo.find('#basictv').html(d.SFUIN.tv['Basic TV']);
-				subtotalInfo.find('#economytv').html(d.SFUIN.tv['Economy TV']);
-				subtotalInfo.find('#startertv').html(d.SFUIN.tv['Starter TV']);
-				subtotalInfo.find('#preferredtv').html(d.SFUIN.tv['Preferred TV']);
-				subtotalInfo.find('#premiertv').html(d.SFUIN.tv['Premier TV']);
-				subtotalInfo.find('#economynet').html(d.SFUIN.internet['Economy Internet']);
-				subtotalInfo.find('#performancenet').html(d.SFUIN.internet['Performance Internet']);
-				subtotalInfo.find('#blastnet').html(d.SFUIN.internet['Blast Internet']);
-				subtotalInfo.find('#extremenet').html(d.SFUIN.internet['Extreme Internet']);
-				subtotalInfo.find('#localphone').html(d.SFUIN.phone['Local Phone']);
-				subtotalInfo.find('#unlimitedphone').html(d.SFUIN.phone['Unlimited Phone']);
-				subtotalInfo.find('#xf300').html(d.SFUIN.xfinity_home['XH 300']);
-				subtotalInfo.find('#xf350').html(d.SFUIN.xfinity_home['XH 350']);
-				subtotalInfo.find('#xf100').html(d.SFUIN.xfinity_home['XH 100']);
-				subtotalInfo.find('#xf150').html(d.SFUIN.xfinity_home['XH 150']);
+				subtotalInfo.find('#basictv').html(accounting.formatMoney(d.SFUIN.tv['Basic TV']));
+				subtotalInfo.find('#economytv').html(accounting.formatMoney(d.SFUIN.tv['Economy TV']));
+				subtotalInfo.find('#startertv').html(accounting.formatMoney(d.SFUIN.tv['Starter TV']));
+				subtotalInfo.find('#preferredtv').html(accounting.formatMoney(d.SFUIN.tv['Preferred TV']));
+				subtotalInfo.find('#premiertv').html(accounting.formatMoney(d.SFUIN.tv['Premier TV']));
+				subtotalInfo.find('#economynet').html(accounting.formatMoney(d.SFUIN.internet['Economy Internet']));
+				subtotalInfo.find('#performancenet').html(accounting.formatMoney(d.SFUIN.internet['Performance Internet']));
+				subtotalInfo.find('#blastnet').html(accounting.formatMoney(d.SFUIN.internet['Blast Internet']));
+				subtotalInfo.find('#extremenet').html(accounting.formatMoney(d.SFUIN.internet['Extreme Internet']));
+				subtotalInfo.find('#localphone').html(accounting.formatMoney(d.SFUIN.phone['Local Phone']));
+				subtotalInfo.find('#unlimitedphone').html(accounting.formatMoney(d.SFUIN.phone['Unlimited Phone']));
+				subtotalInfo.find('#xf300').html(accounting.formatMoney(d.SFUIN.xfinity_home['XH 300']));
+				subtotalInfo.find('#xf350').html(accounting.formatMoney(d.SFUIN.xfinity_home['XH 350']));
+				subtotalInfo.find('#xf100').html(accounting.formatMoney(d.SFUIN.xfinity_home['XH 100']));
+				subtotalInfo.find('#xf150').html(accounting.formatMoney(d.SFUIN.xfinity_home['XH 150']));
 				return subtotalInfo;
 			}
 			function formatSFUOUT(d) {
@@ -525,7 +597,7 @@
 	        <thead>
 	            <tr>
 	                <th>Sales Rep</th>
-	                <th>SFU-IN</th>
+	                <th class="text-center">SFU-IN</th>
 	                <th>SFU-OUT</th>
 	                <th>MDU-IN</th>
 	                <th>MDU-OUT</th>

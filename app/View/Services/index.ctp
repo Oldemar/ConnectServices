@@ -27,9 +27,6 @@
 				echo $this->Html->link(__('View'), array('action' => 'view', $service['Service']['id']), array('class'=>'btn btn-sm btn-success')); ?>
 			<?php
 				echo $this->Html->link(__('Edit'), array('action' => 'edit', $service['Service']['id']), array('class'=>'btn btn-sm btn-primary')); ?>
-			<?php
-				echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $service['Service']['id']), array('class'=>'btn btn-sm btn-danger'), __('Are you sure you want to delete # %s?', $service['Service']['id'])); 
-			?>
 		</td>
 	</tr>
 <?php endforeach; ?>

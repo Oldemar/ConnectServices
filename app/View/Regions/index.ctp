@@ -6,17 +6,17 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('abbreviation'); ?></th>
+			<th><?php echo $this->Paginator->sort('isacive'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($regions as $region): ?>
 	<tr>
 		<td><?php echo h($region['Region']['name']); ?>&nbsp;</td>
 		<td><?php echo h($region['Region']['abbreviation']); ?>&nbsp;</td>
+		<td><?php echo h($region['Region']['isactive']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $region['Region']['id']), array('class'=>'btn btn-sm btn-primary')); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $region['Region']['id']), array('class'=>'btn btn-sm btn-success')); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $region['Region']['id']), array('class'=>'btn btn-sm btn-danger'), __('Are you sure you want to delete # %s?', $region['Region']['id'])); ?>
-		</td>
 	</tr>
 <?php endforeach; ?>
 	</table>

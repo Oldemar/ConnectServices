@@ -80,9 +80,12 @@ td.details-control {
 tr.shown td.details-control {
     background: url('../resources/details_close.png') no-repeat center center;
 }
-.customer, .salesRep, .services {
+.customer, .salesRep, .services, .SFUIN, .SFUOUT, .MDUIN, .MDUOUT {
   color: #235689;
   cursor: pointer;
+}
+.SFUIN, .SFUOUT, .MDUIN, .MDUOUT {
+  text-align: right;
 }
 
 .isInstalled {

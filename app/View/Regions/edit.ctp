@@ -23,6 +23,15 @@
 ?>
 <div style="clear: both"></div>
 <?php
+	echo $this->Form2->label('isactive', 'Is active?', array(
+		'style'=>'width: 120px'
+		));
+	echo $this->Form2->checkbox('isactive', array(
+		'label'=>false
+		));
+?>
+<div style="clear: both"></div>
+<?php
 	echo $this->Form2->button('Save', array(
 		'type'=>'submit','class'=>'pull-right btn btn-lg btn-primary')); 
 	echo $this->Form2->end(); 
