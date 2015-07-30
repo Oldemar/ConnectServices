@@ -104,6 +104,7 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 								?>
 							</ul>
 						</li>
+						<?php if ($isAuthorized) { ?>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								Suport
@@ -170,6 +171,7 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 								</li>
 							</ul>
 						</li>
+						<?php } ?>
 						<?php
 						if (Authcomponent::User('role_id') !='7') {						?>
 						<li class="dropdown">
