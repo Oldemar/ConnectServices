@@ -20,7 +20,7 @@
 			{
 				echo $this->Html->link(__('View'), array('action' => 'view', $role['Role']['id']),array('class'=>'btn btn-sm btn-success')). ' ';
 				echo $this->Html->link(__('Edit'), array('action' => 'edit', $role['Role']['id']),array('class'=>'btn btn-sm btn-primary')). ' '; 
-				echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $role['Role']['id']),array('class'=>'btn btn-sm btn-danger'), __('Are you sure you want to delete # %s?', $role['Role']['id']));			
+				//echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $role['Role']['id']),array('class'=>'btn btn-sm btn-danger'), __('Are you sure you want to delete # %s?', $role['Role']['id']));			
 			}
 			?>
 		</td>
