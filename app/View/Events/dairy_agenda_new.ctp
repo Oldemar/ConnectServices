@@ -34,9 +34,6 @@
 					?>
 					</div>
 					<div class="col-lg-1 hidden-xs hidden-sm text-left form-group">
-					<?php
-						echo $this->Html->link('Go',array('action'=>'dairyAgendaNew',date('Y-m-d')),array('class'=>'btn btn-sm btn-default'));
-					?>
 					</div>
 					<div class="col-sm-2 col-lg-1 text-center">
 					<?php
@@ -77,7 +74,9 @@
 		revert: 'invalid'
 	})
 	$( "#aDate" ).datepicker({
-		dateformat: 'yy-mm-dd'
+		dateFormat: 'yy-mm-dd'
+	}).change(function(){
+		window.location = $('#aDate').val();
 	});
 	$( ".droppable" ).droppable({
 		tolerance: "pointer",
