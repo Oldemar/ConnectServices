@@ -65,7 +65,7 @@
 							$w-=10;
 							$m=$z*10;
 							$dgb = $events['Event']['pinned']?'':' draggable';
-							echo "<div class=\"event ".$dgb."\" data-uid=\"".$events['User']['id']."\" data-eid=\"".$events['Event']['id']."\" style=\"float: left; color: #fff; background-color: ".$events['EventType']['color']."; width: 50%; padding: 3px;\"><p style=\"margin: 0 0 3px; color: white; font-weight: bold;\">".$events['User']['username'].'</p><hr style="margin: 1px"><small><span style="color: yellow">'.$events['Event']['title']."</span></small></div>";
+							echo "<div class=\"event ".$dgb."\" data-uid=\"".$events['User']['id']."\" data-eid=\"".$events['Event']['id']."\"  data-title=\"".$events['Event']['title']."\" style=\"float: left; color: #fff; background-color: ".$events['EventType']['color']."; width: 50%; padding: 3px;\"><p style=\"margin: 0 0 3px; color: white; font-weight: bold;\">".$events['User']['username'].'</p><hr style="margin: 1px"><small><span style="color: yellow">'.$events['Event']['title']."</span></small></div>";
 						}
 						echo '</div></td>';
 					}
@@ -75,13 +75,48 @@
 			?>
 	</table>
 </div>
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Reschedule</h4>
+			</div>
+			<div class="modal-body">
+				<h4>Event</h4>
+				<h5 id="modalEventTitle" style="padding-left:15px"></h5>
+				<div class="row well form-group">
+				<div class="col-lg-1">
+					<h5>FROM:</h5>
+				</div>
+				<div class="col-lg-3 dateEventModal"></div>
+				<div class="col-lg-1">
+					<h5>TO:</h5>
+				</div>
+				<div class="col-lg-6">
+				<?php
+					echo $this->Form->input('aDate', array(
+						'type'=>'datetime',
+						'class'=>'form-control srcInput',
+//						'id'=>'aDate',
+						'label'=>false,
+						'div'=>false
+						));
+				?>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div>
 <script>
 	$( ".draggable" ).draggable({ 
 		containment: "#weeklyAgenda",
 		revert: 'invalid'
-	})
-</script>
-<script type="text/javascript">
+	});
+
 	$( ".droppable" ).droppable({
 		tolerance: "pointer",
 		drop: function(event, ui) {
@@ -97,5 +132,18 @@
 				} 
 			})
 		}
+	});
+
+	$( "#aDate" ).datepicker({
+		dateFormat: 'yy-mm-dd',
+		minDate: 0
+
+	});
+
+	$('.event').click(function( e ){
+		$('#dateEventModal').html($(e.target).closest('td').attr('data-date'));
+		$('#modalEventTitle').html($(this).attr('data-title'));
+
+		$('#eventModal').modal('show');
 	});
 </script>

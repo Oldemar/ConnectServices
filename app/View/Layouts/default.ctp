@@ -107,7 +107,7 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 						<?php if ($isAuthorized) { ?>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								Suport
+								Support
 								<b class="caret"></b>
 							</a>
 							<ul class="dropdown-menu">

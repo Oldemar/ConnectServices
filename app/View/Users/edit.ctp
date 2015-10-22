@@ -2,13 +2,45 @@
 		<h3><?php echo __('Edit User'); ?></h3>
 <?php
 	echo $this->Form2->input('id');
-	echo $this->Form2->input('username', array(
-		'class'=>'form-control pull-left',
-		'style'=>'width: 250px',
-		'label'=>array(
-			'class'=>'pull-left',
-			'style'=>'width: 120px'
-			)));
+	if ($isAuthorized){
+		echo $this->Form2->input('username', array(
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
+	} else {
+		echo $this->Form2->input('username', array(
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'readonly'=>'readonly',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
+	}
+?>
+<div style="clear: both"></div>
+<?php
+	if ($isAuthorized) {
+		echo $this->Form2->input('region_id', array(
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
+	} else {
+		echo $this->Form2->input('Region.name', array(
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'readonly'=>'readonly',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
+	}
 ?>
 <div style="clear: both"></div>
 <?php
@@ -23,16 +55,6 @@
 <div style="clear: both"></div>
 <?php
 	echo $this->Form2->input('email', array(
-		'class'=>'form-control pull-left',
-		'style'=>'width: 250px',
-		'label'=>array(
-			'class'=>'pull-left',
-			'style'=>'width: 120px'
-			)));
-?>
-<div style="clear: both"></div>
-<?php
-	echo $this->Form2->input('region_id', array(
 		'class'=>'form-control pull-left',
 		'style'=>'width: 250px',
 		'label'=>array(
@@ -176,8 +198,8 @@
 	else
 	{
 		echo $this->Form2->input('role_id', array(
-			'type'=>'hidden',
-			'value'=>'7'));
+			'type'=>'hidden'
+			));
 	}
 	echo $this->Form2->input('parent_id', array(
 		'type'=>'hidden',
