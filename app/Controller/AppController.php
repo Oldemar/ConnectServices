@@ -57,6 +57,7 @@ class AppController extends Controller {
 	public $objLoggedUser = null;
 	public $isMobile = null;
 	public $myTopLeader;
+	public $isAuthorized;
 
 /**
 *

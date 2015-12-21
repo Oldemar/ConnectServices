@@ -160,42 +160,13 @@ class PayrollsController extends AppController {
 						'Saving.user_id'=>$userPayroll['User']['id']),
 					'ORDER'=>'Saving.savingdate DESC'
 				));
-			$savingsBalance = (isset($lastsaving) && !empty($lastsaving) ? $lastsaving['Saving']['balance'] + $userPayroll['savings'] : $userPayroll['savings']);
-			$lastAdvance = $this->Advance->find('first', array(
-					'conditions'=>array(
-						'Advance.user_id'=>$userPayroll['User']['id']),
-					'ORDER'=>'Advance.advdate DESC'
-				));
-			$advBalance = (isset($lastAdvance) && !empty($lastAdvance) ? $lastAdvance['Advance']['balance'] : 0);
+			$balance = (isset($lastsaving) && !empty($lastsaving) ? $lastsaving['Saving']['balance'] + $userPayroll['savings'] : $userPayroll['savings']);
 			$data['Saving'][] = array(
 				'user_id' => $userPayroll['User']['id'],
 				'savingdate' => date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00')),
 				'saving' => $userPayroll['savings'],
-				'balance' => $savingsBalance
+				'balance' => $balance
 			);
-			if ( $userPayroll['totaldue'] < 0 ) {
-				if ( $savingsBalance < -$userPayroll['totaldue'] ) {
-					$saving = 0 - $savingsBalance;
-					$advance = -$userPayroll['totaldue'] - $savingsBalance;
-				} else {
-					$saving = $userPayroll['totaldue'];
-					$advance = 0;
-				}
-				$data['Saving'][] = array(
-					'user_id' => $userPayroll['User']['id'],
-					'savingdate' => date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00')),
-					'saving' => $saving,
-					'balance' => $savingsBalance + $saving,
-					'notes'=>'Charge Back withdraw.'
-				);
-				if ($advance > 0){
-					$data['Advance'][] = array(
-						'user_id' => $userPayroll['User']['id'],
-						'advdate'=> date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00')),
-						'value' => $advance
-					); 
-				}
-			}
 		}
 /*
 		$this->loadModel('Sale');
@@ -207,9 +178,8 @@ class PayrollsController extends AppController {
 		}
 		$this->Payroll->saveMany($data['Payroll']);
 		$this->Saving->saveMany($data['Saving']);
-		$this->Advance->saveMany($data['Advance']);
 */
-		echo '<pre>'.print_r($data,true).'</pre>';
+		echo '<pre>'.print_r($arrResult['chargeback'],true).'</pre>';
 	}
 
 	private function calculateComission() {

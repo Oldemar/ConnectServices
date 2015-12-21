@@ -121,13 +121,6 @@
 			'class'=>'pull-left',
 			'style'=>'width: 120px'
 			)));
-	echo $this->Form2->input('carrier_id', array(
-		'class'=>'form-control pull-left',
-		'style'=>'width: 250px',
-		'label'=>array(
-			'class'=>'pull-left',
-			'style'=>'width: 120px; padding-left: 20px'
-			)));
 ?>
 <div style="clear: both"></div>
 <?php
@@ -155,6 +148,26 @@
 <?php
 		echo $this->Form2->input('bonus', array(
 			'value'=>0,
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
+?>
+<div style="clear: both"></div>
+<?php
+		echo $this->Form2->input('triplebonus', array(
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
+?>
+<div style="clear: both"></div>
+<?php
+		echo $this->Form2->input('quadbonus', array(
 			'class'=>'form-control pull-left',
 			'style'=>'width: 250px',
 			'label'=>array(

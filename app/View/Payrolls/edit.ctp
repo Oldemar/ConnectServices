@@ -45,6 +45,7 @@
 		echo $this->Form->input('bonus', array(
 			'class'=>'form-control pull-left',
 			'style'=>'width: 250px',
+			'readonly'=>'readonly',
 			'label'=>array(
 				'class'=>'pull-left',
 				'style'=>'width: 120px'
@@ -53,8 +54,20 @@
 	<div style="clear: both"></div>
 	<?php
 		echo $this->Form->input('advance', array(
+			'readonly'=>'readonly',
 			'class'=>'form-control pull-left',
 			'style'=>'width: 250px',
+			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
+	?>
+	<div style="clear: both"></div>
+	<?php
+		echo $this->Form->input('totaldue', array(
+			'readonly'=>'readonly',
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px;font-weight: bold',
 			'label'=>array(
 				'class'=>'pull-left',
 				'style'=>'width: 120px'
@@ -72,11 +85,22 @@
 	?>
 	<div style="clear: both"></div>
 	<?php	
-
 		echo $this->Form->input('chknumber', array(
 			'class'=>'form-control pull-left',
 			'style'=>'width: 250px',
 			'label'=>array(
+				'class'=>'pull-left',
+				'style'=>'width: 120px'
+				)));
+	?>
+	<div style="clear: both"></div>
+	<?php	
+		echo $this->Form->input('notes', array(
+			'type'=>'textarea',
+			'escape'=>true,
+			'class'=>'form-control pull-left',
+			'style'=>'width: 250px',
+			'label'=>array('Notes',
 				'class'=>'pull-left',
 				'style'=>'width: 120px'
 				)));

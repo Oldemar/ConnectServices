@@ -82,13 +82,6 @@ public $actsAs = array('Tree','Containable');
 			'fields' => '',
 			'order' => ''
 		),
-		'Carrier' => array(
-			'className' => 'Carrier',
-			'foreignKey' => 'carrier_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
 		'ParentUser' => array(
 			'className' => 'User',
 			'foreignKey' => 'parent_id',

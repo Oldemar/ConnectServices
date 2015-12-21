@@ -10,7 +10,6 @@
 			<th><?php echo $this->Paginator->sort('value'); ?></th>
 			<th><?php echo $this->Paginator->sort('balance'); ?></th>
 			<th><?php echo $this->Paginator->sort('advdate'); ?></th>
-			<th><?php echo $this->Paginator->sort('received'); ?></th>
 			<th><?php echo $this->Paginator->sort('bank'); ?></th>
 			<th><?php echo $this->Paginator->sort('chknumber'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
@@ -24,7 +23,6 @@
 		<td><?php echo h($advance['Advance']['value']); ?>&nbsp;</td>
 		<td><?php echo h($advance['Advance']['balance']); ?>&nbsp;</td>
 		<td><?php echo h($advance['Advance']['advdate']); ?>&nbsp;</td>
-		<td><?php echo h($advance['Advance']['received']); ?>&nbsp;</td>
 		<td><?php echo h($advance['Advance']['bank']); ?>&nbsp;</td>
 		<td><?php echo h($advance['Advance']['chknumber']); ?>&nbsp;</td>
 		<td><?php echo h($advance['Advance']['created']); ?>&nbsp;</td>

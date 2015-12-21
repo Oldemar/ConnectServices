@@ -23,27 +23,20 @@ class Advance extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		),
-		'Sale' => array(
-			'className' => 'Sale',
-			'foreignKey' => 'sale_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
 		)
 	);
 
 	public function beforeSave($options = array())
 	{
+
 		if (isset($this->data['Advance']['advdate']))
 		{
 			$this->data['Advance']['advdate'] = date('Y-m-d', strtotime($this->data['Advance']['advdate']));
 		}
-		$lastAdvance = $this->Advance->find('first', array(
+		$lastAdvance = $this->find('first', array(
 			'conditions'=>array(
-				'Advance.user_id'=>$data['Advance']['user_id']),
-			'ORDER'=>'Advance.advdate DESC',
-			'LIMIT'=>1
+				'Advance.user_id'=>$this->data['Advance']['user_id']),
+			'ORDER'=>'Advance.advdate DESC'
 		));
 		$this->data['Advance']['balance'] = $this->data['Advance']['value'] + $lastAdvance['Advance']['balance'];
 	}

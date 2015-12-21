@@ -31,13 +31,20 @@ class SalesController extends AppController {
  * @return void
  */
 	public function mySales() {
-		$this->Sale->recursive = 0;
-		$this->Paginator->settings = array(
-			'conditions'=>array(
-				'Sale.user_id'=>$this->objLoggedUser->getID(),
-				'Sale.comissioned'=>false
-				));
-		$this->set('sales', $this->Paginator->paginate());
+	}
+
+/**
+ * index method
+ *
+ * @return void
+ */
+	public function mySalesJSON() {
+		$this->autoRender = false;
+		
+		$arrReturn['data'] = $this->Sale->find('all',array('conditions'=>array('Sale.user_id'=>$this->objLoggedUser->getID())));
+
+		echo json_encode($arrReturn);
+		exit;
 	}
 
 /**
@@ -69,7 +76,67 @@ class SalesController extends AppController {
 					)));
 		}
 		$regions = $this->Sale->Region->find('list');
-		$this->set(compact('regions'));
+		$users = $this->Sale->User->find('list', array('conditions'=>array('User.role_id !='=>array('1','2','8'))));
+		$this->set(compact('regions','users'));
+		$this->set('sales', $this->Paginator->paginate());
+	}
+
+
+/**
+ * usersales method
+ *
+ * @return void
+ */
+	public function allsalesJSON() {
+
+		$this->autoRender = false;
+		$conditions = (!empty($this->data['region'])) ? array('Sale.region_id'=>$this->data['region']): '';
+		if (!empty($this->data['start'])) {
+			$conditions['Sale.sales_date >='] = date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00'));
+			$conditions['Sale.sales_date <='] = date('Y-m-d H:i:s',strtotime($this->data['end'].' 23:59:59'));
+		}
+		if (isset($this->data['userID']) && !empty($this->data['userID'])) {
+			$conditions['Sale.user_id'] = $this->data['userID'];
+		}
+
+		$arrReturn['data'] = $this->Sale->find('all',array('conditions'=>$conditions));
+
+
+		echo json_encode($arrReturn);
+		exit;
+	}
+
+/**
+ * chargeback method
+ *
+ * @return void
+ */
+	public function chargeback() {
+		if (!in_array($this->objLoggedUser->getAttr('role_id'), array('1', '2', '8')))
+		{
+			if ( $this->objLoggedUser->getAttr('role_id') == '5' ) 
+			{
+				$childrenIds = Hash::extract($this->User->children($this->objLoggedUser->getID(),true), '{n}.User.id');
+			}
+			if ($this->objLoggedUser->getAttr('role_id') == '4')
+			{
+				$childrenIds = Hash::extract($this->User->children($this->objLoggedUser->getID()), '{n}.User.id');
+			}
+			if ($this->objLoggedUser->getAttr('role_id') == '9')
+			{
+				$childrenIds = $this->objLoggedUser->getAttr('topleader');
+			}
+
+			$this->Paginator->settings = array(
+				'conditions'=>array(
+					'AND'=>array(
+						'Sale.user_id'=>$childrenIds,
+						'Sale.comissioned'=>true
+					)));
+		}
+		$regions = $this->Sale->Region->find('list');
+		$users = $this->Sale->User->find('list', array('conditions'=>array('User.role_id !='=>array('1','2','8'))));
+		$this->set(compact('regions','users'));
 		$this->set('sales', $this->Paginator->paginate());
 	}
 
@@ -78,27 +145,27 @@ class SalesController extends AppController {
  *
  * @return void
  */
-	public function allsalesAJAX() {
+	public function chargebackJSON() {
 
-		$this->Sale->recursive = 1;
 		$this->autoRender = false;
-		$conditions = array('Sale.region_id'=>$this->data['region']);
+		$conditions = array('Sale.comissioned'=>true);
+		if (!empty($this->data['region'])) {
+			$conditions['Sale.region_id'] = $this->data['region'];
+		}
 		if (!empty($this->data['start'])) {
 			$conditions['Sale.sales_date >='] = date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00'));
 			$conditions['Sale.sales_date <='] = date('Y-m-d H:i:s',strtotime($this->data['end'].' 23:59:59'));
 		}
-		if (!empty($this->data['user_id'])) {
-			$conditions['Sale.user_id'] = $this->data['user_id'];
+		if (isset($this->data['userID']) && !empty($this->data['userID'])) {
+			$conditions['Sale.user_id'] = $this->data['userID'];
 		}
-		$this->Paginator->settings = array(
-			'conditions'=>array($conditions));
 
-		$sales = $this->Paginator->paginate();
-		$arrReturn[] = $this->element('Sales/allsales',array('sales'=>$sales));
+		$arrReturn['data'] = $this->Sale->find('all',array('conditions'=>$conditions));
+//		echo '<pre>'.print_r($this->data).'</pre>';
+
 		echo json_encode($arrReturn);
 		exit;
 	}
-
 /**
  * allsalesbyuserAJAX method
  *
@@ -167,7 +234,7 @@ class SalesController extends AppController {
 	}
 
 /**
- * listsalesAJAX method
+ * update installed method
  *
  * @return void
  */
@@ -178,6 +245,23 @@ class SalesController extends AppController {
 		$this->Sale->id = $this->data['sid'];
 		
 		$arrReturn = $this->Sale->saveField('installed', $this->data['installed']);
+
+		echo json_encode($arrReturn);
+		exit;
+	}
+
+/**
+ * updateChargeBack method
+ *
+ * @return void
+ */
+	public function updatechargeback() {
+
+		$this->autoRender = false;
+
+		$this->Sale->id = $this->data['sid'];
+		
+		$arrReturn = $this->Sale->saveField('chargeback', $this->data['chargeback']);
 
 		echo json_encode($arrReturn);
 		exit;

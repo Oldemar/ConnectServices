@@ -1,7 +1,7 @@
 <script src="http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
 
 <div class="sales index">
-	<h2><?php echo __('Not comissioned Sales'); ?></h2>
+	<h2><?php echo __('Comissioned Sales'); ?></h2>
 	<div class="row" style="padding-bottom: 15px">
 		<div class="col-lg-4" style="padding: 5px; ">
 			<div style="padding: 5px; border: 1px solid #ccc; border-radius: 10px">
@@ -107,7 +107,7 @@
 					'destroy': true,
 					'ajax': 
 						{
-							'url': "<?php echo Router::url(array('controller'=>'sales','action'=>'allsalesJSON')); ?>",
+							'url': "<?php echo Router::url(array('controller'=>'sales','action'=>'chargebackJSON')); ?>",
 							'type' : "POST",
 							'dataType': 'json',
 							'data': 
@@ -155,25 +155,49 @@
 								'className': 'services'
 							},
 							{
-								"data": "Sale.sales_date",
-								'title': 'Sales Date'
+								"data": "Sale.accnumber",
+								'title': 'Account #'
 							},
 							{
-								"data": "Sale.instalation",
-								"title": 'Instalation Date'
+								"data": "Sale.comission",
+								"title": 'Comission'
 							},
 							{
 								"data": "Sale",
-								'title': 'Actions',
-								'className': 'test',
+								'title': 'Charge Back ?',
+								'className': 'chargeback',
 								"render": function(data)
 								{
-									return data.comissioned == '0' ? "<a href=\"<?php echo Router::url(array('controller'=>'sales', 'action'=>'edit')); ?>/"+data.id+"\" class=\"btn btn-sm btn-success\">Edit</a> <a href=\"<?php echo Router::url(array('controller'=>'sales','action'=>'delete')); ?>/"+data.id+"\" class=\"btn btn-sm btn-danger\"  onclick=\"if (!confirm('Are you sure?')) { return false; }\">Delete</a>":'';
+									return data.chargeback == '0' ? '<button type="button" id="noChgBck'+data.id+'" class="btn btn-sm btn-danger text-center">No</button>': '<button type="button" id="yesChgBck'+data.id+'" class="btn btn-sm btn-success text-center">Yes</button>';
 								}
 							}
 						]						
 				});
+			    $('#salesTable tbody').on('click','td.chargeback',function(){
+			        var tr = $(this).closest('tr');
+			        var row = salesTable.row( tr );
+			        changeChargebackStatus(row.data());
+			    });
+
 			};
+			function changeChargebackStatus(dI) {
+				var dIChargeback = (dI.Sale.chargeback == '1' ? '0' : '1');
+				$.ajax({
+					url: "<?php echo Router::url(array('controller'=>'sales','action'=>'updatechargeback')); ?>",
+					type : "POST",
+					data: { 
+						'sid': dI.Sale.id, 
+						'chargeback': dIChargeback,
+					}
+				}).done(function(arrReturn){
+					if (dI.Sale.chargeback == '1') {
+				    	$('#yesChgBck'+dI.Sale.id).removeClass('btn-success').addClass('btn-danger').html('No').removeAttr('id').attr('id','noChgBck'+dI.Sale.id);
+					} else {
+				    	$('#noChgBck'+dI.Sale.id).removeClass('btn-danger').addClass('btn-success').html('Yes').removeAttr('id').attr('id','yesChgBck'+dI.Sale.id);
+					}					
+					dI.Sale.chargeback = dIChargeback;
+				});
+			}
 
 	  	</script>
 	</div>

@@ -1,13 +1,22 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * Saving Model
+ * Customer Model
  *
  * @property User $User
- * @property Payroll $Payroll
+ * @property City $City
+ * @property State $State
+ * @property Carrier $Carrier
+ * @property Sale $Sale
  */
-class Saving extends AppModel {
+class Payroll extends AppModel {
 
+/**
+ * Display field
+ *
+ * @var string
+ */
+	public $actAs = array('Containable');
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 

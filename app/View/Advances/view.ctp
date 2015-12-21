@@ -21,11 +21,6 @@
 			<?php echo h($advance['Advance']['advdate']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Received'); ?></dt>
-		<dd>
-			<?php echo h($advance['Advance']['received']); ?>
-			&nbsp;
-		</dd>
 		<dt><?php echo __('Bank'); ?></dt>
 		<dd>
 			<?php echo h($advance['Advance']['bank']); ?>
@@ -48,16 +43,15 @@
 		</dd>
 	</dl>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Edit Advance'), array('action' => 'edit', $advance['Advance']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete Advance'), array('action' => 'delete', $advance['Advance']['id']), null, __('Are you sure you want to delete # %s?', $advance['Advance']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Advances'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Advance'), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Sales'), array('controller' => 'sales', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Sale'), array('controller' => 'sales', 'action' => 'add')); ?> </li>
-	</ul>
+<div class="row">
+	<div class="col-xs-3 col-sm-1">
+		<?php 
+			echo $this->Html->link(__('Edit'), array('action' => 'edit', $advance['Advance']['id']), array('class'=>'btn btn-md btn-primary'));
+		?>
+	</div>
+	<div class="col-xs-3 col-sm-1">
+		<?php
+			echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $advance['Advance']['id']), array('class'=>'btn btn-md btn-danger'), __('Are you sure you want to delete # %s?', $advance['Advance']['id'])); 
+		?>
+	</div>
 </div>

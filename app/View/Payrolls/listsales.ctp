@@ -2,7 +2,7 @@
 <script src="<?php echo $this->webroot; ?>js/accounting.js"></script>
 	<div class="row" id="payrollHeader">
 		<div class="col-lg-6">
-			<h2>Not comissioned Sales</h2>
+			<h2>Prepare Payroll</h2>
 		</div>
 		<div class="col-lg-6 text-right">
 			<div class="row">
@@ -143,6 +143,25 @@
 				listSales();
 				e.preventDefault();
 			});
+			$(document).on('click', '#savePayroll',function(){
+				$.ajax({
+					url: "<?php echo Router::url(array('controller'=>'payrolls','action'=>'savepayroll')); ?>",	
+					type: 'POST',
+					dataType: 'json',
+					data: 
+						{ 
+							'regionID': $('#regionID').val(), 
+							'start': $('#startDate').val(), 
+							'end': $('#endDate').val(),
+							'userID': $('#userID').val()
+						}
+				}).done(function(data){
+					window.location = "<?php echo Router::url(array('controller'=>'payrolls','action'=>'listsales')); ?>";
+				});
+			});
+			$('#btnGenerate').on('click', function(){
+				$('#myGeneratePayrollModal').modal('show');
+			});
 			$('#btnPreview').click(function(e){
 				subtotalInfo = $('#subtotalInfo');
 				var varTable = $('#salesTable').DataTable();
@@ -203,6 +222,24 @@
 								'className':'MDUOUT text-right'
 							},
 							{
+								'data': 'triplebonus',
+								'render': function(d)
+									{
+										return accounting.formatMoney(d);
+									},
+								'className':'text-right'
+
+							},
+							{
+								'data': 'quadbonus',
+								'render': function(d)
+									{
+										return accounting.formatMoney(d);
+									},
+								'className':'text-right'
+
+							},
+							{
 								'data': 'User.bonus',
 								'render': function(d)
 									{
@@ -231,6 +268,15 @@
 							},
 							{
 								'data': 'Advance.balance',
+								'render': function(d)
+									{
+										return accounting.formatMoney(d);
+									},
+								'className':'text-right'
+
+							},
+							{
+								'data': 'chargeback',
 								'render': function(d)
 									{
 										return accounting.formatMoney(d);
@@ -375,21 +421,27 @@
 							},
 							{
 								"data": "Sale.sales_date",
-								'title': 'Sales Date'
+								'title': 'Sales Date',
+								'width': '145px'
 							},
 							{
-								"data": "Sale.notes",
-								'title': "Notes",
-								"width": "150px"
+								"data": "Sale.jobnumber",
+								'title': "Job Number",
+								'width': '100px'
+							},
+							{
+								"data": "Sale.accnumber",
+								'title': "Acc Number"
 							},
 							{
 								"data": "Sale.instalation",
-								"title": 'Instalation Date'
+								"title": 'Instalation Date',
+								'width':'145px'
 							},
 							{
 								"data": "Sale",
 								'title': 'Installed?',
-								'className': 'test',
+								'className': 'installed',
 								"render": function(data)
 								{
 									return data.installed == '0' ? '<button type="button" id="noInst'+data.id+'" class="btn btn-sm btn-danger">No</button>': '<button type="button" id="yesInst'+data.id+'" class="btn btn-sm btn-success">Yes</button>';
@@ -445,7 +497,7 @@
 			        }
 			    	td = 'services';
 			    } );
-			    $('#salesTable tbody').on('click','td.test',function(){
+			    $('#salesTable tbody').on('click','td.installed',function(){
 			        var trI = $(this).closest('tr');
 			        var rowI = salesTable.row( trI );
 			        changeInstallStatus(rowI.data());
@@ -597,14 +649,17 @@
 	        <thead>
 	            <tr>
 	                <th>Sales Rep</th>
-	                <th class="text-center">SFU-IN</th>
+	                <th>SFU-IN</th>
 	                <th>SFU-OUT</th>
 	                <th>MDU-IN</th>
 	                <th>MDU-OUT</th>
+	                <th>Triple Bonus</th>
+	                <th>Quad Bonus</th>
 	                <th>Bonus</th>
 	                <th>Sub Total</th>
 	                <th>Saving</th>
 	                <th>Advances</th>
+	                <th>Charge Back</th>
 	                <th>Total Due</th>
 	            </tr>
 	        </thead>
@@ -988,3 +1043,24 @@
 	   		</div>			
 		</div>
 	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="myGeneratePayrollModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">PayRoll Generation</h4>
+				</div>
+				<div class="modal-body">
+					<div class="alert alert-warning" role="alert">
+						<em><b>Note:</b> Once you have started saving the Payroll, there's NO going back. So please be sure you're doing the right thing.<br>Click the SAVE button below to start the Payroll saving.</em>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+					<button type="button" class="btn btn-primary" id="savePayroll"  data-dismiss="modal" >Save</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->

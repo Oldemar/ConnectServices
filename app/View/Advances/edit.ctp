@@ -4,7 +4,7 @@
 		<h3><?php echo __('Edit Advance'); ?></h3>
 	<?php
 		echo $this->Form->input('id');
-		echo $this->Form->input('User.username', array(
+		echo $this->Form->input('user_id', array(
 			'class'=>'form-control pull-left',
 			'style'=>'width: 250px',
 			'readonly'=>'readonly',
@@ -19,7 +19,6 @@
 		echo $this->Form->input('value', array(
 			'class'=>'form-control pull-left',
 			'style'=>'width: 250px',
-			'readonly'=>'readonly',
 			'label'=>array(
 				'class'=>'pull-left',
 				'style'=>'width: 120px'
@@ -30,6 +29,7 @@
 
 		echo $this->Form->input('balance', array(
 			'class'=>'form-control pull-left',
+			'readonly'=>'readonly',
 			'style'=>'width: 250px',
 			'label'=>array(
 				'class'=>'pull-left',
@@ -50,17 +50,6 @@
 				'style'=>'width: 120px'
 				)));
 		?>
-	<div style="clear: both"></div>
-	<?php
-
-		echo $this->Form->input('received', array(
-		'class'=>'form-control pull-left',
-		'style'=>'width: 250px',
-		'label'=>array(
-			'class'=>'pull-left',
-			'style'=>'width: 120px'
-			)));
-	?>
 	<div style="clear: both"></div>
 	<?php
 

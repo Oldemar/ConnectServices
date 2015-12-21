@@ -1,5 +1,18 @@
+td.details-control {
+    background: url('../img/details_open.png') no-repeat center center;
+    cursor: pointer;
+    max-width: : 30px;
+}
+tr.shown td.details-control {
+    background: url('../img/details_close.png') no-repeat center center;
+}
+
+.graphics-wrap {
+  margin-top: 10px;
+}
+
 #container {
-  margin-top: 60px;
+  margin-top: 50px;
 }
   .event {
     color: #fff;
@@ -73,13 +86,7 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-td.details-control {
-    background: url('../resources/details_open.png') no-repeat center center;
-    cursor: pointer;
-}
-tr.shown td.details-control {
-    background: url('../resources/details_close.png') no-repeat center center;
-}
+
 .customer, .salesRep, .services, .SFUIN, .SFUOUT, .MDUIN, .MDUOUT {
   color: #235689;
   cursor: pointer;

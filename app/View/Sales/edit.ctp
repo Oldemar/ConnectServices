@@ -88,22 +88,25 @@
 		?>
 		<div style="clear: both"></div>
 		<?php
-			echo $this->Form2->input('installed', array(
-				'type'=>'checkbox',
-				'class'=>'form-control pull-left'
-					));
+			echo $this->Form2->label('installed', 'Is installed?', array(
+				'style'=>'width: 120px; padding:10px 0'
+				));
+
+			echo $this->Form2->checkbox('installed', array(
+				'label'=>false
+				));
 		?>
 		<div style="clear: both"></div>
 		<?php
 			if (in_array($objLoggedUser->getAttr('role_id'), array('2','9')))
 			{
-				echo '<h4 class="text-center">Notes</h4>';
-				echo $this->Form2->textarea('notes', array(
-				'class'=>'form-control pull-left',
-				'style'=>'width: 350px;min-height:200px',
-				'label'=>array(
-					'class'=>'pull-left',
-					'style'=>'width: 100px'
+				echo $this->Form2->input('notes', array(
+					'type'=>'textarea',
+					'class'=>'form-control pull-left',
+					'style'=>'width: 250px;min-height:200px',
+					'label'=>array(
+						'class'=>'pull-left',
+						'style'=>'width: 100px'
 					)));
 			}
 		?>

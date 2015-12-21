@@ -1,12 +1,11 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * Saving Model
+ * Applicant Model
  *
  * @property User $User
- * @property Payroll $Payroll
  */
-class Saving extends AppModel {
+class Applicant extends AppModel {
 
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -25,5 +24,4 @@ class Saving extends AppModel {
 			'order' => ''
 		)
 	);
-
 }

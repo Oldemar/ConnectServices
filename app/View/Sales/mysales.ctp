@@ -1,45 +1,149 @@
+<script src="http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+
 <div class="sales index">
-	<h2><?php echo __('Sales'); ?></h2>
-	<table class="table table-bordered table-hover">
-	<tr>
-			<th><?php echo $this->Paginator->sort('customer_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('tv'); ?></th>
-			<th><?php echo $this->Paginator->sort('internet'); ?></th>
-			<th><?php echo $this->Paginator->sort('phone'); ?></th>
-			<th><?php echo $this->Paginator->sort('xfinity_home'); ?></th>
-			<th><?php echo $this->Paginator->sort('sales_date'); ?></th>
-			<th><?php echo $this->Paginator->sort('comissioned'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
-	</tr>
-	<?php foreach ($sales as $sale): ?>
-	<tr>
-		<td>
-			<?php echo $this->Html->link($sale['Customer']['name'], array('controller' => 'customers', 'action' => 'view', $sale['Customer']['id'])); ?>
-		</td>
-		<td><?php echo h($sale['Sale']['tv']); ?>&nbsp;</td>
-		<td><?php echo h($sale['Sale']['internet']); ?>&nbsp;</td>
-		<td><?php echo h($sale['Sale']['phone']); ?>&nbsp;</td>
-		<td><?php echo h($sale['Sale']['xfinity_home']); ?>&nbsp;</td>
-		<td><?php echo h($sale['Sale']['sales_date']); ?>&nbsp;</td>
-		<td><?php echo h($sale['Sale']['comissioned']); ?>&nbsp;</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $sale['Sale']['id']), array('class'=>'btn btn-small btn-success')); ?><br>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $sale['Sale']['id']), array('class'=>'btn btn-small btn-danger'), __('Are you sure you want to delete # %s?', $sale['Sale']['id'])); ?>
-		</td>
-	</tr>
-<?php endforeach; ?>
-	</table>
-	<p>
-	<?php
-	echo $this->Paginator->counter(array(
-	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-	));
-	?>	</p>
-	<div class="paging">
-	<?php
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
-	?>
+	<h2><?php echo __('My Sales'); ?></h2>
+	<div class="row" style="padding-bottom: 15px">
+		<div class="col-lg-1">
+		</div>
+		<div class="col-lg-6" style="padding:5px; border: 1px solid #ccc; border-radius: 10px">
+			<div class="row">
+				<div class="col-lg-1">
+					<h5><b>From</b></h5>
+				</div>
+				<div class="col-lg-5">
+				<?php
+					echo $this->Form2->input('start', array(
+						'type'=>'text',
+						'class'=>'form-control srcInput',
+						'id'=>'startDate',
+						'label'=>false,
+						'div'=>false
+						));
+				?>
+				</div>
+				<div class="col-lg-1">
+					<h5><b>To</b></h5>
+				</div>
+				<div class="col-lg-5">
+				<?php
+					echo $this->Form2->input('end', array(
+						'type'=>'text',
+						'id'=>'endDate',
+						'class'=>'form-control srcInput',
+						'label'=>false,
+						'div'=>false
+						));
+				?>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$( "#startDate" ).datepicker({
+				dateformat: 'yy-mm-dd',
+				onClose: function( selectedDate ) {
+					$( "#endDate" ).datepicker( "option", "minDate", selectedDate );
+				}
+			});
+			$( "#endDate" ).datepicker({
+				dateformat: 'yy-mm-dd',
+				onClose: function( selectedDate ) {
+					$( "#startDate" ).datepicker( "option", "maxDate", selectedDate );
+				}
+			});
+			$('.srcInput').change(function(e){
+
+				drawSalesTable();
+				e.preventDefault();
+			});
+			
+			function drawSalesTable() {
+				varUserInfo = $('#userInfo');
+				varCustomerInfo = $('#customerInfo');
+				varSaleInfo = $('#saleInfo');
+				td = "";
+				$('#previewPayrollTable').hide();
+				$('#salesTable').empty()
+				var salesTable = $('#salesTable').show().DataTable({
+					'destroy': true,
+					'ajax': 
+						{
+							'url': "<?php echo Router::url(array('controller'=>'sales','action'=>'mysalesJSON')); ?>",
+							'type' : "POST",
+							'dataType': 'json',
+							'data': 
+								{ 
+									start: $('#startDate').val(), 
+									end: $('#endDate').val()
+								}
+						},
+					'columns':
+						[
+							{
+								"data": "Customer.name",
+								"title": "Customer",
+								'className':'customer'
+							},
+							{
+								"data": "Customer.cellphone",
+								"title": "Customer Phone",
+								'className':'customer'
+							},
+							{
+								"data": "Sale",
+								"title": "Services",
+								"render": function(data)
+								{
+									var varReturn = "";
+									if (data.tv != 'Not Purchased') varReturn = 'TV';
+									if (data.internet != 'Not Purchased') {
+										if (varReturn.length > 0) varReturn += ", ";
+										varReturn += 'INTERNET';
+									}
+									if (data.phone != 'Not Purchased') {
+										if (varReturn.length > 0) varReturn += ", ";
+										varReturn += 'PHONE';
+									}
+									if (data.xfinity_home != 'Not Purchased') {
+										if (varReturn.length > 0) varReturn += ", ";
+										varReturn += 'XFINITY HOME';
+									}
+
+									return varReturn;
+								},
+								'className': 'services'
+							},
+							{
+								"data": "Sale.sales_date",
+								'title': 'Sales Date'
+							},
+							{
+								"data": "Sale.instalation",
+								"title": 'Instalation Date'
+							},
+							{
+								"data": "Sale",
+								'title': 'Actions',
+								'className': 'test',
+								"render": function(data)
+								{
+									return data.installed == '0' ? '<button type="button" id="noInst'+data.id+'" class="btn btn-sm btn-danger">No</button>': '<button type="button" id="yesInst'+data.id+'" class="btn btn-sm btn-success">Yes</button>';
+								}
+							}
+						]						
+				});
+			};
+
+	  	</script>
 	</div>
+	<div>
+		<table id="salesTable" class="table table-bordered table-striped table-hover data-table">
+			<thead>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+	<div id="salesList">
+	</div>
+
 </div>

@@ -10,7 +10,6 @@ App::uses('CakeTime', 'Utility');
 class UsersController extends AppController {
 
 	public $helpers = array('GoogleCharts.GoogleCharts');
-	public $isAuthorized; 
 
 /**
 *
@@ -108,7 +107,6 @@ class UsersController extends AppController {
 			}
 		}
 		$roles = $this->User->Role->find('list');
-		$carriers = $this->User->Carrier->find('list');
 		$regions = $this->User->Region->find('list');
 		$this->set(compact('roles','carriers','regions'));
 	}
@@ -126,12 +124,7 @@ class UsersController extends AppController {
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('The user has been saved'));
-				if ($isAuthorized) {
-					$this->redirect(array('action' => 'index'));
-				} else {
-					$this->redirect(array('action' => 'dashboard'));
-				}
+				$this->redirect(array('action' => 'dashboard'));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
 			}
@@ -139,8 +132,7 @@ class UsersController extends AppController {
 			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
 			$this->request->data = $this->User->find('first', $options);
 		}
-		$roles = $this->User->Role->find('list');
-		$carriers = $this->User->Carrier->find('list');
+		$roles = $this->User->Role->find('list',array('conditions'=>array('Role.id !='=>array('1','8'))));
 		$parents = $this->User->ParentUser->find('list');
 		$leaders = $this->User->find('list', array('conditions'=>array('User.role_id'=>array('2','4'))));
 		$regions = $this->User->Region->find('list');
