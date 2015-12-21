@@ -3,13 +3,13 @@
 		<div class="col-xs-12 col-sm-6">
 			<h4>Sales</h4>
 			<div class="well">
-				BOX 1
+				Under Construction
 			</div>
 		</div>
 		<div class="col-xs-12 col-sm-6">
 			<h4>Monthly Sales by Region</h4>
 			<div class="well">
-				BOX 2
+				Under Construction
 			</div>
 		</div>
 	</div>
@@ -17,13 +17,13 @@
 		<div class="col-xs-12 col-sm-6">
 			<h4>Sales by Representative</h4>
 			<div class="well">
-				BOX 3
+				Under Construction
 			</div>
 		</div>
 		<div class="col-xs-12 col-sm-6">
 			<h4>Sei la</h4>
 			<div class="well">
-				BOX 4
+				Under Construction
 			</div>
 		</div>
 	</div>

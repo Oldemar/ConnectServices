@@ -197,7 +197,7 @@ class PayrollsController extends AppController {
 				}
 			}
 		}
-/*
+
 		$this->loadModel('Sale');
 		foreach ($salesforpayroll as $key => $sale) {
 			$data['Sale']['id'] = $sale['Sale']['id'];
@@ -208,8 +208,8 @@ class PayrollsController extends AppController {
 		$this->Payroll->saveMany($data['Payroll']);
 		$this->Saving->saveMany($data['Saving']);
 		$this->Advance->saveMany($data['Advance']);
-*/
-		echo '<pre>'.print_r($data,true).'</pre>';
+
+//		echo '<pre>'.print_r($data,true).'</pre>';
 	}
 
 	private function calculateComission() {
