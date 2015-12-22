@@ -58,8 +58,7 @@ class AdvancesController extends AppController {
 		$users = $this->Advance->User->find('list',array(
 			'conditions'=> array(
 				'User.role_id !='=>array('1','2','8','9'))));
-		$sales = $this->Advance->Sale->find('list');
-		$this->set(compact('users', 'sales'));
+		$this->set(compact('users'));
 	}
 
 /**
@@ -87,8 +86,7 @@ class AdvancesController extends AppController {
 		$users = $this->Advance->User->find('list',array(
 			'conditions'=> array(
 				'User.role_id !='=>array('1','2','8','9'))));
-		$sales = $this->Advance->Sale->find('list');
-		$this->set(compact('users', 'sales'));
+		$this->set(compact('users'));
 	}
 
 /**
@@ -112,22 +110,18 @@ class AdvancesController extends AppController {
 		return $this->redirect(array('action' => 'index'));
 	}
 
-	public function generate()
+	public function getbalance()
 	{
-		$this->loadModel('User');
-		$this->loadModel('Sale');
 		$this->autoRender = false;
-		foreach ($this->data as $key => $userInfo) 
-		{
-			$this->Advance->save($userInfo['Advance']);
-			$this->Advance->id = null;
-			foreach ($userInfo['Sale'] as $key1 => $sale) 
-			{
-				$this->Sale->id = $sale['id'];
-				$this->Sale->savefield('advanced',1);
-			}
-		}
-		echo '<pre>'.print_r($this->data,true).'</pre>';
+		$lastAdvance = $this->Advance->find('first', array(
+			'conditions'=>array(
+				'Advance.user_id'=>$this->data['userID']),
+			'order'=>'Advance.advdate DESC'
+		));
+		$arrReturn = (isset($lastAdvance['Advance']['balance']) ? $lastAdvance['Advance']['balance'] : 0 );
+
+//		echo '<pre>'.print_r($lastAdvance,true).'</pre>';
+		echo json_encode($arrReturn);
 		exit;
 	}
 

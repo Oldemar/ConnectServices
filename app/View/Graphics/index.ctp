@@ -21,7 +21,7 @@
 			</div>
 		</div>
 		<div class="col-xs-12 col-sm-6">
-			<h4>Sei la</h4>
+			<h4>TBD</h4>
 			<div class="well">
 				Under Construction
 			</div>

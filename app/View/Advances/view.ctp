@@ -6,14 +6,14 @@
 			<?php echo $this->Html->link($advance['User']['username'], array('controller' => 'users', 'action' => 'view', $advance['User']['id'])); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Sale'); ?></dt>
-		<dd>
-			<?php echo $this->Html->link($advance['Sale']['id'], array('controller' => 'sales', 'action' => 'view', $advance['Sale']['id'])); ?>
-			&nbsp;
-		</dd>
 		<dt><?php echo __('Value'); ?></dt>
 		<dd>
 			<?php echo h($advance['Advance']['value']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Balance'); ?></dt>
+		<dd>
+			<?php echo h($advance['Advance']['balance']); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Advdate'); ?></dt>
@@ -47,11 +47,6 @@
 	<div class="col-xs-3 col-sm-1">
 		<?php 
 			echo $this->Html->link(__('Edit'), array('action' => 'edit', $advance['Advance']['id']), array('class'=>'btn btn-md btn-primary'));
-		?>
-	</div>
-	<div class="col-xs-3 col-sm-1">
-		<?php
-			echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $advance['Advance']['id']), array('class'=>'btn btn-md btn-danger'), __('Are you sure you want to delete # %s?', $advance['Advance']['id'])); 
 		?>
 	</div>
 </div>

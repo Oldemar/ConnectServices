@@ -2,7 +2,7 @@
 	<h2><?php echo __('Applicants'); ?></h2>
 	<table class="table table-condensed table-hover table-bordered">
 	<tr>
-			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('Manager'); ?></th>
 			<th><?php echo $this->Paginator->sort('fullname'); ?></th>
 			<th><?php echo $this->Paginator->sort('email'); ?></th>
 			<th><?php echo $this->Paginator->sort('facebook'); ?></th>

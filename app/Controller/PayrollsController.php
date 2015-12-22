@@ -186,18 +186,20 @@ class PayrollsController extends AppController {
 					'savingdate' => date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00')),
 					'saving' => $saving,
 					'balance' => $savingsBalance + $saving,
-					'notes'=>'Charge Back withdraw.'
+					'notes'=>'Charge Back or Advance withdraw.'
 				);
 				if ($advance > 0){
 					$data['Advance'][] = array(
 						'user_id' => $userPayroll['User']['id'],
-						'advdate'=> date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00')),
-						'value' => $advance
+						'advdate' => date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00')),
+						'received' => 1,
+						'value' => $advance,
+						'notes'=> 'Charge back or Advance balance not received.'
 					); 
 				}
 			}
 		}
-
+/*
 		$this->loadModel('Sale');
 		foreach ($salesforpayroll as $key => $sale) {
 			$data['Sale']['id'] = $sale['Sale']['id'];
@@ -208,8 +210,8 @@ class PayrollsController extends AppController {
 		$this->Payroll->saveMany($data['Payroll']);
 		$this->Saving->saveMany($data['Saving']);
 		$this->Advance->saveMany($data['Advance']);
-
-//		echo '<pre>'.print_r($data,true).'</pre>';
+*/
+		echo '<pre>'.print_r($data,true).'</pre>';
 	}
 
 	private function calculateComission() {
@@ -513,22 +515,35 @@ class PayrollsController extends AppController {
 		$thisKey = 0;
 		foreach ($comissionByUserTemp as $key => $comissions) {
 			$comissionByUser[$thisKey] = $comissions;
-			$xpto = $this->User->find('first',array('conditions'=>array('User.id'=>$key)));
+			$advances = $this->Advance->find('all',array('conditions'=>array('Advance.user_id'=>$key,'Advance.charge'=>true,'Advance.received'=>false)));
+			$userSale = $this->User->find('first', array('conditions'=>array('User.id'=>$key)));
+			$comissionByUser[$thisKey]['User'] = $userSale['User'];
 			$chargeback = 0;
 			$arrChargeback = $this->Sale->find('all', array(
 				'contain'=>array('Sale'),'fields'=> array('Sale.id','Sale.user_id','Sale.comission'),
 				'conditions'=>array('Sale.comissioned'=>true,'Sale.chargeback'=>true,'Sale.charged'=>false,'Sale.user_id'=>$key)
 			));
 
+			/*
+			*     Charge Back 
+			*/
 			foreach ($arrChargeback as $key => $valChargeBack) {
 				$chargeback += $valChargeBack['Sale']['comission'];
 			}
 			$comissionByUser[$thisKey]['chargeback'] = ( isset( $chargeback ) ? $chargeback : 0 );
-			$comissionByUser[$thisKey]['User'] = $xpto['User'];
-			if (!count($xpto['Advance'])-1 < 0) 
-				$comissionByUser[$thisKey]['Advance'] = $xpto['Advance'][count($xpto['Advance'])-1];
-			else
-				$comissionByUser[$thisKey]['Advance']['balance'] = 0;
+
+			/*
+			*      Calculate Advance balance to charge
+			*/
+			$advBalance = 0;
+			foreach ($advances as $key => $advanceRow) {
+				$advBalance += $advanceRow['Advance']['value'];
+			}
+			$comissionByUser[$thisKey]['Advance']['balance'] = $advBalance;
+
+			/*
+			*     Final Total due
+			*/
 			$comissionByUser[$thisKey]['totaldue'] = 
 				($comissions['subtotal'] - $comissions['savings']) - 
 					$comissionByUser[$thisKey]['Advance']['balance'] - 
@@ -536,7 +551,7 @@ class PayrollsController extends AppController {
 			$thisKey++;
 		}
 
-		return array('comissionByUser'=>$comissionByUser,'salesforpayroll'=>$salesforpayroll,'chargeback'=>$chargeback);		
+		return array('comissionByUser'=>$comissionByUser,'salesforpayroll'=>$salesforpayroll,'chargeback'=>$chargeback,'advances'=>$advances);		
 	}
 
 }
