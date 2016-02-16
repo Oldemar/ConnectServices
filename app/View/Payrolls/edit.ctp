@@ -1,4 +1,3 @@
-<? //echo '<pre>'.print_r($this->data,true).'</pre>'; ?>
 <div class="payrolls form">
 <?php echo $this->Form->create('Payroll', array('role'=>'form','class'=>'form-horizontal')); ?>
 		<h3><?php echo __('Insert Bank Info'); ?></h3>

@@ -222,16 +222,7 @@
 								'className':'MDUOUT text-right'
 							},
 							{
-								'data': 'triplebonus',
-								'render': function(d)
-									{
-										return accounting.formatMoney(d);
-									},
-								'className':'text-right'
-
-							},
-							{
-								'data': 'quadbonus',
+								'data': 'bonusTot',
 								'render': function(d)
 									{
 										return accounting.formatMoney(d);
@@ -446,6 +437,15 @@
 								{
 									return data.installed == '0' ? '<button type="button" id="noInst'+data.id+'" class="btn btn-sm btn-danger">No</button>': '<button type="button" id="yesInst'+data.id+'" class="btn btn-sm btn-success">Yes</button>';
 								}
+							},
+							{
+								"data": "Sale",
+								"title": "Action",
+								"className": "editSale",
+								"render": function(data)
+								{
+									return '<button type="button" id="editSale" data-sid="'+data.id+'" class="btn btn-sm btn-success">Edit</button>';
+								}
 							}
 						]						
 				});
@@ -502,6 +502,12 @@
 			        var rowI = salesTable.row( trI );
 			        changeInstallStatus(rowI.data());
 			    });
+			    $('#salesTable tbody').on('click','td.editSale',function(){
+			        var trS = $(this).closest('tr');
+			        var rowS = salesTable.row( trS );
+			        var thisData = rowS.data();
+			        window.location = "<?php echo Router::url(array('controller'=>'sales','action'=>'edit')); ?>"+'/'+thisData.Sale.id;
+			    });
 			};
 			function changeInstallStatus(dI) {
 				var dIInstalled = (dI.Sale.installed == '1' ? '0' : '1');
@@ -551,7 +557,7 @@
 				varSaleInfo.find('#internet').html(d.Sale.internet)
 				varSaleInfo.find('#phone').html(d.Sale.phone)
 				varSaleInfo.find('#xfinity_home').html(d.Sale.xfinity_home)
-				varSaleInfo.find('#extras').html('TBD')
+				varSaleInfo.find('#extras').html('<br>'+d.Sale.bonus)
 				return varSaleInfo;
 			}
 			function formatSFUIN(d) {
@@ -653,8 +659,8 @@
 	                <th>SFU-OUT</th>
 	                <th>MDU-IN</th>
 	                <th>MDU-OUT</th>
-	                <th>Triple Bonus</th>
-	                <th>Quad Bonus</th>
+	                <th data-toggle="tooltip" data-placement="top" title="This value is already included on category
+	                 total">Trip/Quad</th>
 	                <th>Bonus</th>
 	                <th>Sub Total</th>
 	                <th>Saving</th>
@@ -665,8 +671,6 @@
 	        </thead>
 	    </table>
    	</div>
-
-
    	<div style="display: none">
    		<div id="userInfo" class="well">
 	   		<div class="row">
@@ -871,13 +875,6 @@
 	   						<td id="xfinity_home" style="padding: 0 10px">
 	   						</td>
 	   					</tr>
-	   					<tr>
-	   						<td>
-	   							Extras: 
-	   						</td>
-	   						<td id="extras" style="padding: 0 10px">
-	   						</td>
-	   					</tr>
 	   				</table>
 	   			</div>
 	   			<div class="col-lg-6">
@@ -904,6 +901,14 @@
 	   						<td id="accnumber" style="padding: 0 10px">
 	   						</td>
 	   					</tr>
+	   					<tr>
+	   						<td>
+	   							<br>Sale Bonus: 
+	   						</td>
+	   						<td id="extras" style="padding: 0 10px">
+	   						</td>
+	   					</tr>
+
 	   				</table>
 	   			</div>
 	   		</div>

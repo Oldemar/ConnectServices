@@ -88,13 +88,14 @@
 		?>
 		<div style="clear: both"></div>
 		<?php
-			echo $this->Form2->label('installed', 'Is installed?', array(
-				'style'=>'width: 120px; padding:10px 0'
-				));
+				echo $this->Form2->label('installed', 'Is installed?', array(
+					'style'=>'width: 120px; padding:10px 0'
+					));
 
-			echo $this->Form2->checkbox('installed', array(
-				'label'=>false
-				));
+				echo $this->Form2->checkbox('installed', array(
+					'disabled'=>'disabled',
+					'label'=>false
+					));
 		?>
 		<div style="clear: both"></div>
 		<?php
@@ -294,7 +295,17 @@
 					'style'=>'width: 100px'
 					)));
 		?>
-		<div style="clear: both"></div>
+		<div style="clear: both"></div><hr>
+		<?php 
+				echo $this->Form2->input('bonus', array(
+				'class'=>'form-control pull-left',
+				'style'=>'width: 250px',
+				'label'=>array(
+					'class'=>'pull-left',
+					'style'=>'width: 100px'
+					)));
+		?>
+		<div style="clear: both"></div><hr>
 		<br>
 	</div>
 </div>
