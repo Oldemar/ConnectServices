@@ -50,7 +50,7 @@
 		foreach ($eventsByDay as $time => $events) 
 		{
 			echo '<tr><td class="text-center">'.gmdate('h:i a', $time*1800).'</td>';
-			echo '<td class="droppable" data-date="'. date('Y-m-d',strtotime($date)) .'" data-start="'. gmdate('h:i:s', $time*1800) .'" data-end="'. $time .'" data-uid="" style="width: 90%; "><div style="width: 100%;">';
+			echo '<td class="eventAdd droppable" data-date="'. date('Y-m-d',strtotime($date)) .'" data-start="'. gmdate('h:i:s', $time*1800) .'" data-end="'. $time .'" data-uid="'.$objLoggedUser->getID().'" style="width: 90%; "><div style="width: 100%;">';
 			$z=0;
 			$w=120;
 			foreach ($events as $keyEvent => $event) 
@@ -68,12 +68,104 @@
 	?>
 	</table>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Event</h4>
+			</div>
+			<div class="modal-body">
+				<?php
+					echo $this->Form2->create('Event');
+					echo $this->Form2->input('EventType', array(
+						'value'=> '6',
+						'readonly'=>'readonly',
+						'class'=>'form-control pull-left',
+						'style'=>'width: 250px',
+						'required'=>'required',
+						'placeholder'=>'This field is required',
+						'label'=>array(
+							'class'=>'pull-left',
+							'style'=>'width: 100px'
+							)));
+					if (in_array($objLoggedUser->getAttr('role_id'), array('2','9')))
+					{
+						echo $this->Form2->input('user_id', array(
+							'class'=>'form-control pull-left',
+							'style'=>'width: 250px',
+							'label'=>array(
+								'class'=>'pull-left',
+								'style'=>'width: 100px'
+							)));
+					}
+					else
+					{
+						echo $this->Form2->input('user_id', array(
+							'type'=>'hidden',
+							'value'=>$objLoggedUser->getID()
+							));
+					}
+				?>
+				<div style="clear: both"></div>
+				<?php
+					echo $this->Form2->input('title', array(
+						'class'=>'form-control pull-left',
+						'style'=>'width: 250px',
+						'required'=>'required',
+						'placeholder'=>'This field is required',
+						'label'=>array(
+							'class'=>'pull-left',
+							'style'=>'width: 100px'
+						)));
+				?>
+				<div style="clear: both"></div>
+				<?php
+					echo $this->Form2->input('details', array(
+						'type'=>'textarea',
+						'class'=>'form-control pull-left',
+						'style'=>'width: 250px',
+						'required'=>'required',
+						'placeholder'=>'This field is required',
+						'label'=>array(
+							'class'=>'pull-left',
+							'style'=>'width: 100px'
+						)));
+				?>
+				<div style="clear: both"></div>
+				<?php
+					echo $this->Form2->input('sales_date', array(
+						'type'=>'text',
+						'required'=>'required',
+						'placeholder'=>'This field is required',
+						'id'=>'saleDate',
+						'class'=>'form-control pull-left aData',
+						'style'=>'width: 250px',
+						'value'=>date('Y-m-d'),
+						'label'=>array(
+							'class'=>'pull-left',
+							'style'=>'width: 100px'
+							)));
+				?>
+				<div style="clear: both"></div>
+				<?php
+					echo $this->Form2->end();
+				?>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 	$( ".draggable" ).draggable({ 
 		containment: "#weeklyAgenda",
 		revert: 'invalid'
 	})
-	$( "#aDate" ).datepicker({
+	$( "#aDate, .aData" ).datepicker({
 		dateFormat: 'yy-mm-dd'
 	}).change(function(){
 		window.location = $('#aDate').val();
@@ -93,5 +185,8 @@
 				} 
 			})
 		}
+	});
+	$('.eventAdd').on('click', function(){
+		$('#eventModal').modal('show');
 	});
 </script>

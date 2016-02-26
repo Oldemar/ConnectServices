@@ -26,6 +26,16 @@ class AdvancesController extends AppController {
 	}
 
 /**
+ * myadvances method
+ *
+ * @return void
+ */
+	public function myadvances($id) {
+		$this->Advance->recursive = 0;
+		$this->set('advances', $this->Paginator->paginate('Advance',array('Advance.user_id'=>$id)));
+	}
+
+/**
  * view method
  *
  * @throws NotFoundException

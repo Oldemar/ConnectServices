@@ -1,5 +1,10 @@
 <div class="applicants index">
-	<h2><?php echo __('Applicants'); ?></h2>
+	<h2>
+		<?php 
+			echo __('Applicants'); 
+			echo $this->Html->link('New Applicant',array('action'=>'add'),array('class'=>'btn btn-md btn-info pull-right','style'=>'color: black; font-weight: bold'));
+		?>
+	</h2>
 	<table class="table table-condensed table-hover table-bordered">
 	<tr>
 			<th><?php echo $this->Paginator->sort('Manager'); ?></th>

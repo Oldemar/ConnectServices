@@ -26,6 +26,16 @@ class SavingsController extends AppController {
 	}
 
 /**
+ * mysavings method
+ *
+ * @return void
+ */
+	public function mysavings($id) {
+		$this->Saving->recursive = 0;
+		$this->set('savings', $this->Paginator->paginate('Saving',array('Saving.user_id'=>$id)));
+	}
+
+/**
  * view method
  *
  * @throws NotFoundException

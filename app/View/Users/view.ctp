@@ -56,11 +56,6 @@
 			<?php echo h($user['User']['cellphone']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Carrier Id'); ?></dt>
-		<dd>
-			<?php echo h($user['User']['carrier_id']); ?>
-			&nbsp;
-		</dd>
 		<dt><?php echo __('Workphone'); ?></dt>
 		<dd>
 			<?php echo h($user['User']['workphone']); ?>

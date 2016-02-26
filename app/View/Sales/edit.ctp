@@ -224,16 +224,6 @@
 		?>
 		<div style="clear: both"></div>
 		<?php
-				echo $this->Form2->input('Customer.carrier_id', array(
-				'class'=>'form-control pull-left',
-				'style'=>'width: 250px',
-				'label'=>array(
-					'class'=>'pull-left',
-					'style'=>'width: 100px'
-					)));
-		?>
-		<div style="clear: both"></div>
-		<?php
 				echo $this->Form2->input('Customer.workphone', array(
 				'class'=>'form-control pull-left',
 				'style'=>'width: 250px',

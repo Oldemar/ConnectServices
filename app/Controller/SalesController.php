@@ -268,21 +268,6 @@ class SalesController extends AppController {
 	}
 
 /**
- * view method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function view($id = null) {
-		if (!$this->Sale->exists($id)) {
-			throw new NotFoundException(__('Invalid sale'));
-		}
-		$options = array('conditions' => array('Sale.' . $this->Sale->primaryKey => $id));
-		$this->set('sale', $this->Sale->find('first', $options));
-	}
-
-/**
  * add method
  *
  * @return void

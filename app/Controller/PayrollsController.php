@@ -14,7 +14,6 @@ class PayrollsController extends AppController {
  * @var array
  */
 	public $components = array('Paginator');
-
 /**
  * index method
  *
@@ -152,12 +151,13 @@ class PayrollsController extends AppController {
 		$arrResult = $this->calculateComission();
 		$comissionByUser = $arrResult['comissionByUser'];
 		$salesforpayroll = $arrResult['salesforpayroll'];
+		$advances = $arrResult['advances'];
 
  		$this->loadModel('Saving');
 
 		foreach ($comissionByUser as $key => $userPayroll) {
 			$data['Payroll'][] = array(
-				'payrolldate' => date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00')),
+				'payrolldate' => date('Y-m-d H:i:s'),
 				'user_id' => $userPayroll['User']['id'],
 				'saving' => $userPayroll['savings'],
 				'bonus' => $userPayroll['User']['bonus'],
@@ -165,21 +165,25 @@ class PayrollsController extends AppController {
 				'advance' => $userPayroll['Advance']['balance'],
 				'totaldue' => $userPayroll['totaldue']
 			);
-			$lastsaving = $this->Saving->find('first', array(
+			$lastsaving = $this->Saving->find('all', array(
 					'conditions'=>array(
 						'Saving.user_id'=>$userPayroll['User']['id']),
-					'ORDER'=>'Saving.savingdate DESC'
+					'order'=>array(
+						'savingdate'=>'DESC'),
+					'limit'=>1
 				));
-			$savingsBalance = (isset($lastsaving) && !empty($lastsaving) ? $lastsaving['Saving']['balance'] + $userPayroll['savings'] : $userPayroll['savings']);
-			$lastAdvance = $this->Advance->find('first', array(
+			$savingsBalance = (isset($lastsaving) && !empty($lastsaving) ? $lastsaving[0]['Saving']['balance'] + $userPayroll['savings'] : $userPayroll['savings']);
+			$lastAdvance = $this->Advance->find('all', array(
 					'conditions'=>array(
 						'Advance.user_id'=>$userPayroll['User']['id']),
-					'ORDER'=>'Advance.advdate DESC'
+					'order'=>array(
+						'advdate'=>'DESC'),
+					'limit'=>1
 				));
-			$advBalance = (isset($lastAdvance) && !empty($lastAdvance) ? $lastAdvance['Advance']['balance'] : 0);
+			$advBalance = (isset($lastAdvance) && !empty($lastAdvance) ? $lastAdvance[0]['Advance']['balance'] : 0);
 			$data['Saving'][] = array(
 				'user_id' => $userPayroll['User']['id'],
-				'savingdate' => date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00')),
+				'savingdate' => date('Y-m-d H:i:s'),
 				'saving' => $userPayroll['savings'],
 				'balance' => $savingsBalance
 			);
@@ -198,30 +202,28 @@ class PayrollsController extends AppController {
 					'balance' => $savingsBalance + $saving,
 					'notes'=>'Charge Back or Advance withdraw.'
 				);
-				if ($advance > 0){
-					$data['Advance'][] = array(
-						'user_id' => $userPayroll['User']['id'],
-						'advdate' => date('Y-m-d H:i:s',strtotime($this->data['start'].' 00:00:00')),
-						'received' => 1,
-						'value' => $advance,
-						'notes'=> 'Charge back or Advance balance not received.'
-					); 
-				}
 			}
 		}
-/*
+		foreach ($advances as $key => $adv) {
+			$advances[$key]['Advance']['received'] = true;
+		}
+		$data['Advance'] = $advances;
+		
 		$this->loadModel('Sale');
 		foreach ($salesforpayroll as $key => $sale) {
-			$data['Sale']['id'] = $sale['Sale']['id'];
-			$data['Sale']['comissioned'] = 1;
-			$data['Sale']['comission'] = $sale['Sale']['comission'];
-			$this->Sale->save($data['Sale']);
+			$data['Sale'][] = array(
+				'id' => $sale['Sale']['id'],
+				'comissioned' => 1,
+				'comission' => $sale['Sale']['comission']
+				);
 		}
 		$this->Payroll->saveMany($data['Payroll']);
 		$this->Saving->saveMany($data['Saving']);
-		$this->Advance->saveMany($data['Advance']);
-*/
-		echo '<pre>'.print_r($data,true).'</pre>';
+		$this->Sale->saveMany($data['Sale']);
+		if (isset($data['Advance']) && !empty($data['Advance'])) 
+			$this->Advance->saveMany($data['Advance']);
+
+		$this->redirect(array('controller'=>'payrolls','action'=>'index'));
 	}
 
 	private function calculateComission() {
@@ -331,6 +333,7 @@ class PayrollsController extends AppController {
 				$comissionByUserTemp[$sale['User']['id']] = $catSales;
 				$comissionByUserTemp[$sale['User']['id']]['userTot'] = 0;
 				$comissionByUserTemp[$sale['User']['id']]['bonusTot'] = 0;
+				$salesforpayroll[$key]['Sale']['comission'] = 0;
 			}
 			if ($sale['Sale']['category'] == 'SFU-IN') {
 				if ($sale['Sale']['tv'] != 'Not Purchased') {
@@ -340,6 +343,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['tv']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['sfuinTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['internet'] != 'Not Purchased') {
 					$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUIN'][$sale['Sale']['internet']] *
@@ -348,6 +352,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['internet']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['sfuinTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['phone'] != 'Not Purchased') {
 					$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUIN'][$sale['Sale']['phone']] *
@@ -356,6 +361,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['phone']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['sfuinTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['xfinity_home'] != 'Not Purchased') {
 					$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUIN'][$sale['Sale']['xfinity_home']] *
@@ -364,6 +370,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['xfinity_home']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['sfuinTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['bonus'] != 'None') {
 					$comiss = $servicesPrices[$sale['Sale']['region_id']]['SFUIN'][$sale['Sale']['bonus']];
@@ -372,6 +379,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUIN']['sfuinTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['bonusTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 			} elseif ($sale['Sale']['category'] == 'SFU-OUT') {
 				if ($sale['Sale']['tv'] != 'Not Purchased') {
@@ -381,6 +389,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['tv']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['sfuouTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['internet'] != 'Not Purchased') {
 					$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUOUT'][$sale['Sale']['internet']] *
@@ -389,6 +398,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['internet']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['sfuouTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['phone'] != 'Not Purchased') {
 					$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUOUT'][$sale['Sale']['phone']] *
@@ -397,6 +407,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['phone']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['sfuouTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['xfinity_home'] != 'Not Purchased') {
 					$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['SFUOUT'][$sale['Sale']['xfinity_home']] *
@@ -405,6 +416,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['xfinity_home']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['sfuouTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['bonus'] != 'None') {
 					$comiss = $servicesPrices[$sale['Sale']['region_id']]['SFUOUT'][$sale['Sale']['bonus']];
@@ -413,6 +425,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['SFUOUT']['sfuouTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['bonusTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 			} elseif ($sale['Sale']['category'] == 'MDU-IN') {
 				if ($sale['Sale']['tv'] != 'Not Purchased') {
@@ -422,6 +435,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['tv']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['mduinTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['internet'] != 'Not Purchased') {
 					$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUIN'][$sale['Sale']['internet']] *
@@ -430,6 +444,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['internet']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['mduinTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['phone'] != 'Not Purchased') {
 					$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUIN'][$sale['Sale']['phone']] *
@@ -438,6 +453,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['phone']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['mduinTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['xfinity_home'] != 'Not Purchased') {
 					$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUIN'][$sale['Sale']['xfinity_home']] *
@@ -455,6 +471,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUIN']['mduinTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['bonusTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 			} elseif ($sale['Sale']['category'] == 'MDU-OUT') {
 				if ($sale['Sale']['tv'] != 'Not Purchased') {
@@ -464,6 +481,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['tv']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['mduouTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['internet'] != 'Not Purchased') {
 					$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUOUT'][$sale['Sale']['internet']] *
@@ -472,6 +490,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['internet']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['mduouTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['phone'] != 'Not Purchased') {
 					$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUOUT'][$sale['Sale']['phone']] *
@@ -480,6 +499,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['phone']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['mduouTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['xfinity_home'] != 'Not Purchased') {
 					$comiss  =	( ( $servicesPrices[$sale['Sale']['region_id']]['MDUOUT'][$sale['Sale']['xfinity_home']] *
@@ -488,6 +508,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['xfinity_home']['Total'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['mduouTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 				if ($sale['Sale']['bonus'] != 'None') {
 					$comiss = $servicesPrices[$sale['Sale']['region_id']]['MDUOUT'][$sale['Sale']['bonus']];
@@ -496,6 +517,7 @@ class PayrollsController extends AppController {
 					$comissionByUserTemp[$sale['Sale']['user_id']]['MDUOUT']['mduouTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['userTot'] += $comiss;
 					$comissionByUserTemp[$sale['Sale']['user_id']]['bonusTot'] += $comiss;
+					$salesforpayroll[$key]['Sale']['comission'] += $comiss;
 				}
 			}
 

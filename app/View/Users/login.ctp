@@ -1,8 +1,6 @@
 <?php
 if (isset($logged_in) && $logged_in) {
-?>
-nada
-<?php
+    header('Location:'.Router::url(array('controller'=>'users','action'=>'dashboard')));
 }
 else 
 {

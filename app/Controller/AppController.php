@@ -87,7 +87,7 @@ class AppController extends Controller {
 		/*
 		 * Auth component initial setup
 		 */	
-		$this->Auth->Allow(array('display')); //This is used to allow users to navigate into the main index page of the site without loggin in.
+//		$this->Auth->Allow(array('display')); //This is used to allow users to navigate into the main index page of the site without loggin in.
 		$this->Auth->authError = 'Please Log In to access the page';
 		$this->Auth->loginError = 'Incorrect username/password.';
 		
@@ -98,6 +98,11 @@ class AppController extends Controller {
 		$this->set('isMobile', $this->_isMobile());
 		$this->set('today', $this->_today());
 		$this->set('objLoggedUser', $this->objLoggedUser);
+		$this->set('salesByUsers', $this->salesByUsers());
+		$this->set('csievents', $this->csievents());
+		$this->set('users', $this->salesPerson());
+		$this->set('regions', $this->salesByRegions());
+		$this->set('lastpost', $this->lastpost());
 		
     }
 
@@ -147,11 +152,76 @@ class AppController extends Controller {
 	* This function return the username logged in
 	**/
 	function _username() {
-		$username = NULL;
+		$username = null;
 		if($this->Auth->user()) {
 			$username = $this->Auth->user('username');
 		}
 		return $username;
+		
+	}
+
+	/**
+	* This function return all sales by User
+	**/
+	function salesPerson() {
+		$arrTemp = array();
+		$this->loadModel('User');
+		$arrTemp = $this->User->find('list',array(
+			'conditions'=>array(
+				'User.role_id'=>'6')));
+		return $arrTemp;
+		
+	}
+
+	/**
+	* This function return all sales by User
+	**/
+	function salesByUsers($id = null) {
+		$arrTemp = array();
+		$this->loadModel('User');
+		$arrTemp = $this->User->find('all');
+		return $arrTemp;
+		
+	}
+
+	/**
+	* This function return all sales by Region
+	**/
+	function salesByRegions($id = null) {
+		$arrTemp = array();
+		$this->loadModel('Region');
+		$arrTemp = $this->Region->find('all');
+		return $arrTemp;
+		
+	}
+
+	/**
+	* This function return latest appointments 
+	**/
+	function csievents($id = null) {
+		$arrTemp = array();
+		$this->loadModel('Event');
+		$arrTemp = $this->Event->find('all', array(
+			'conditions'=>array(
+				'Event.event_type_id'=>array(
+					'4','5','8'
+				)),
+			'order'=>'Event.start',
+			'limit'=>3));
+		return $arrTemp;
+		
+	}
+
+	/**
+	* This function return latest appointments 
+	**/
+	function lastpost() {
+		$arrTemp = array();
+		$this->loadModel('Post');
+		$arrTemp = $this->Post->find('first', array(
+			'order'=>array('Post.created'=>'DESC'),
+			'limit'=>1));
+		return $arrTemp;
 		
 	}
 

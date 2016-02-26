@@ -28,7 +28,6 @@
 		<td><?php echo h($advance['Advance']['created']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $advance['Advance']['id']), array('class'=>'btn btn-sm btn-success')); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $advance['Advance']['id']), array('class'=>'btn btn-sm btn-primary')); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>

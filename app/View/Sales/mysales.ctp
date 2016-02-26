@@ -126,7 +126,7 @@
 								'className': 'test',
 								"render": function(data)
 								{
-									return data.installed == '0' ? '<button type="button" id="noInst'+data.id+'" class="btn btn-sm btn-danger">No</button>': '<button type="button" id="yesInst'+data.id+'" class="btn btn-sm btn-success">Yes</button>';
+									return "<a href=<?php echo Router::url(array('controller'=>'sales','action'=>'edit')); ?>/"+data.id+'" class="btn btn-sm btn-danger">Edit</a>';
 								}
 							}
 						]						

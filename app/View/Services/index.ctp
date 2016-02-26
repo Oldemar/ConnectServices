@@ -1,5 +1,11 @@
 <div class="services index">
-	<h2><?php echo __('Services'); ?></h2>
+	<h2 style="padding: 10px 0">
+		<?php echo __('Services');
+		if ($isAuthorized)
+			echo $this->Html->link(__('New Service'), array('action' => 'add'),array('class'=>'btn btn-lg btn-success pull-right')); 
+		?>
+	</h2>
+
 	<table class="table table-condensed table-hover table-bordered">
 	<tr>
 			<th><?php echo $this->Paginator->sort('region_id'); ?></th>

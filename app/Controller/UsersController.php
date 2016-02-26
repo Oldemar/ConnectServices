@@ -166,7 +166,7 @@ class UsersController extends AppController {
 	        	$this->User->id = $this->Auth->user('id');
 				$this->User->savefield('online',1);
 				$this->User->savefield('lastlogin',date('Y-m-d H:i:s'));
-	            $this->redirect(array('controller'=>'users','action'=>'dashboard'));
+	            $this->redirect($this->Auth->redirectUrl());
 	        } else {
 	            $this->Session->setFlash(__('Invalid username or password, try again'));
 	        }

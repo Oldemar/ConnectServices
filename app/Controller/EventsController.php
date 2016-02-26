@@ -160,7 +160,8 @@ class EventsController extends AppController {
     		}
      	}
 
-
+		$this->set('eventTypes', $this->Event->EventType->find('list'));
+     	
 		$this->set('eventsByDay1',$eventsByDay1);
 		$this->set('eventsByDay',$eventsByDay);
 		$this->set('userIds',$userIds);
