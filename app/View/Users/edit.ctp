@@ -178,26 +178,6 @@
 						)));
 		?>
 		<div style="clear: both"></div>
-		<?php
-				echo $this->Form2->input('triplebonus', array(
-					'class'=>'form-control pull-left',
-					'style'=>'width: 250px',
-					'label'=>array(
-						'class'=>'pull-left',
-						'style'=>'width: 120px'
-						)));
-		?>
-		<div style="clear: both"></div>
-		<?php
-				echo $this->Form2->input('quadbonus', array(
-					'class'=>'form-control pull-left',
-					'style'=>'width: 250px',
-					'label'=>array(
-						'class'=>'pull-left',
-						'style'=>'width: 120px'
-						)));
-		?>
-		<div style="clear: both"></div>
 		<?php 
 				echo $this->Form2->input('role_id', array(
 				'class'=>'form-control pull-left',
