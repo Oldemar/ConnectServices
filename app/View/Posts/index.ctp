@@ -18,12 +18,12 @@
 		<td>
 			<?php echo $this->Html->link($post['User']['username'], array('controller' => 'users', 'action' => 'view', $post['User']['id'])); ?>
 		</td>
-		<td><?php echo h($post['Post']['image']); ?>&nbsp;</td>
+		<td><?php echo $this->Html->image($post['Post']['image'],array('width'=>'80')); ?>&nbsp;</td>
 		<td><?php echo h($post['Post']['title']); ?>&nbsp;</td>
-		<td><?php echo h($post['Post']['body']); ?>&nbsp;</td>
+		<td style="max-width: 475px;"><?php echo substr(h($post['Post']['body']),0,500); ?>&nbsp;</td>
 		<td><?php echo h($post['Post']['created']); ?>&nbsp;</td>
 		<td><?php echo h($post['Post']['modified']); ?>&nbsp;</td>
-		<td class="actions">
+		<td class="actions" style="min-width: 175px">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $post['Post']['id']), array('class'=>'btn btn-sm btn-primary')); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $post['Post']['id']), array('class'=>'btn btn-sm btn-success')); ?>
 			<?php 
@@ -31,19 +31,15 @@
 			?>
 		</td>
 	</tr>
-<?php endforeach; ?>
+	<?php endforeach; ?>
 	</table>
-	<p>
-	<?php
-	echo $this->Paginator->counter(array(
-	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-	));
-	?>	</p>
-	<div class="paging">
-	<?php
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
-	?>
+	<div class="pagination pagination-large">
+	    <ul class="pagination">
+	    <?php
+	        echo $this->Paginator->prev(__('Previous'), array('tag' => 'li'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
+	        echo $this->Paginator->numbers(array('separator' => '','currentTag' => 'a', 'currentClass' => 'active','tag' => 'li','first' => 1));
+	        echo $this->Paginator->next(__('Next'), array('tag' => 'li','currentClass' => 'disabled'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
+	    ?>
+	    </ul>
 	</div>
 </div>

@@ -1,17 +1,20 @@
+  <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+  <script>tinymce.init({ selector:'textarea' });</script>
 <?php echo $this->Form2->create('Post', array('type'=>'file')); ?>
 		<h3><?php echo __('New Post'); ?></h3>
-<div class="row">
-	<div class="col-lg-4">
+<div class="well row">
+	<div class="col-xs-12 col-sm-5">
 		<?php
 			if (in_array($objLoggedUser->getAttr('role_id'), array('2','9')))
 			{
 				echo $this->Form2->input('user_id', array(
-				'class'=>'form-control pull-left',
-				'style'=>'width: 250px',
-				'label'=>array(
-					'class'=>'pull-left',
-					'style'=>'width: 100px'
-					)));
+					'empty'=>'Choose a user',
+					'class'=>'form-control pull-left',
+					'style'=>'width: 250px',
+					'label'=>array(
+						'class'=>'pull-left',
+						'style'=>'width: 100px'
+						)));
 			}
 			else
 			{
@@ -22,8 +25,8 @@
 			}
 		?>
 		<?php
-			echo $this->Form2->input('image', array(
-//				'type'=>'file',
+			echo $this->Form2->input('category_id', array(
+				'empty'=>'Choose a category',
 				'class'=>'form-control pull-left',
 				'style'=>'width: 250px',
 				'required'=>'required',
@@ -47,8 +50,8 @@
 		?>
 		<div style="clear: both"></div>
 		<?php
-			echo $this->Form2->input('body', array(
-				'type'=>'textarea',
+			echo $this->Form2->input('File', array(
+				'type'=>'file',
 				'class'=>'form-control pull-left',
 				'style'=>'width: 250px',
 				'required'=>'required',
@@ -77,6 +80,20 @@
 				echo $this->Form2->checkbox('allowcomments', array(
 					'label'=>false
 					));
+		?>
+		<div style="clear: both"></div>
+	</div>
+	<div class="col-xs-12 col-sm-7">
+		<h4>Body</h4>
+		<?php
+			echo $this->Form2->input('body', array(
+				'type'=>'textarea',
+				'class'=>'form-control pull-left',
+				'style'=>'width: 250px',
+				'required'=>'required',
+				'placeholder'=>'This field is required',
+				'label'=>false
+				));
 		?>
 		<div style="clear: both"></div>
 		<?php 

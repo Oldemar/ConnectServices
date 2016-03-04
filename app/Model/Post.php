@@ -29,6 +29,39 @@ class Post extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Category' => array(
+			'className' => 'Category',
+			'foreignKey' => 'category_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
+
+	public function beforeSave( $options = array() ) {
+
+		if ($this->data['Post']['File']['error'] != 0) {
+			$this->errorMessage = 'Upload failed, try again. If the problem persists contact support.';
+			return false;
+		}
+
+		$arrPostType = explode('/',$this->data['Post']['File']['type']);
+		
+		if ($arrPostType[0] == 'image') {
+			$Posttype = '0';
+		} else {
+			$this->errorMessage = 'Only images are accepted, choose another file...';
+			return false;
+		}
+
+		$fileName = md5($this->data['Post']['File']['name'].date('Y-m-d-H:i:s')).'.'.$arrPostType[1];
+		$this->data['Post']['image'] = $fileName;
+
+		move_uploaded_file($this->data['Post']['File']['tmp_name'], $this->webroot.'img/'.$fileName);
+		
+		return true;
+
+	}
+
 }

@@ -205,8 +205,12 @@ class AppController extends Controller {
 			'conditions'=>array(
 				'Event.event_type_id'=>array(
 					'4','5','8'
-				)),
-			'order'=>'Event.start',
+					),
+				'Event.start >='=>$this->_today()
+				),
+			'order'=>array(
+				'Event.start'=>'DESC'
+				),
 			'limit'=>3));
 		return $arrTemp;
 		

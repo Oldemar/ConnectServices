@@ -1,7 +1,7 @@
 <div class="row" style="padding: 10px">
 	<div class="col-xs-12 col-sm-8">
 	<?php
-		echo $this->element('Posts/post',array('post'=>$post));
+		echo $this->element('Posts/posts',array('posts'=>$posts));
 	?>
 	</div>
 	<div class="col-sm-4">

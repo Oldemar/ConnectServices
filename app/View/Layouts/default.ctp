@@ -29,8 +29,7 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 	</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-	<link href="<?php echo $this->webroot ; ?>bootstrap/css/bootstrap-glyphicons.css" rel="stylesheet">
+	<link rel="stylesheet" href="<?php echo $this->webroot; ?>bootstrap/css/connect_bootstrap.css">
 	<link href="<?php echo $this->webroot ; ?>js/jquery-ui-1.11.4/jquery-ui.css" rel="stylesheet">
 
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
@@ -40,19 +39,31 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 	<!-- Bootstrap  -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+	<script src="<?php echo $this->webroot; ?>bootstrap/js/bootstrap.js"></script>
 	<?php
 		echo $this->Html->meta('icon');
 
 		echo $this->Html->css(array(
-			'ConnServ_style',
-			'blue'));
+			'ConnServ_style'));
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 	?>
 	<link type="text/css" rel="stylesheet" href="<?php echo $this->webroot; ?>css/jquery-ui.css">
+	<style type="text/css">
+		/* bootstrap hack: fix content width inside hidden tabs */
+		.tab-content > .tab-pane,
+		.pill-content > .pill-pane {
+		    display: block;     /* undo display:none          */
+		    height: 0;          /* height:0 is also invisible */ 
+		    overflow-y: hidden; /* no-overflow                */
+		}
+		.tab-content > .active,
+		.pill-content > .active {
+		    height: auto;       /* let the content decide it  */
+		} /* bootstrap hack end */
+	</style>
 </head>
 <body>
 	<div id="container">
@@ -68,7 +79,7 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 						</button>
 						<?php
 						if (isset($logged_in) && $logged_in) {
-							echo $this->Html->link( $cakeDescription, array('controller'=>'users', 'action'=>'dashboard'), array('class'=>'navbar-brand')) ;
+							echo $this->Html->link( $this->Html->image('logo_inverse.jpg',array('height'=>'30')), '/', array('class'=>'navbar-brand', 'escape'=>false, 'style'=>'margin:-8px')) ;
 						?>
 					</div>
 					<div class="collapse navbar-collapse" id="csimenu">
@@ -76,38 +87,56 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 							<li>
 								<?php echo $this->Html->link('Dashboard', array('controller'=>'users', 'action'=>'dashboard')); ?>
 							</li>
+							<li>
+								<?php echo $this->Html->link('BLOG', array('controller'=>'posts', 'action'=>'blog')); ?>
+							</li>
+							<?php
+							if($isAuthorized) {
+							?>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 									Payroll
 									<b class="caret"></b>
 								</a>
 								<ul class="dropdown-menu">
-									<?php
-									if($isAuthorized) {
-									?>
 									<li>
 										<?php echo $this->Html->link('Prepare', array('controller'=>'payrolls', 'action'=>'listsales')); ?>
 									</li>
 									<li>
 										<?php echo $this->Html->link('List', array('controller'=>'payrolls', 'action'=>'index')); ?>
 									</li>
-									<?php
-									} else {
-										if ( in_array($objLoggedUser->getAttr('role_id'), array('5', '6')) )
-										{
-									?>
-									<li>
-										<?php
-											echo $this->Html->link('My Payrolls', array('controller'=>'payrolls', 'action'=>'index'));
-										?>
-									</li>
-									<?php
-										}
-									}
-									?>
 								</ul>
 							</li>
-							<?php if ($isAuthorized) { ?>
+							<?php
+							} else {
+							?>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									Earnings
+									<b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu">
+									<li>
+										<?php
+											echo $this->Html->link('My Payrolls', array('controller'=>'payrolls', 'action'=>'mypayrolls',$objLoggedUser->getID()));
+										?>
+									</li>
+									<li>
+										<?php
+											echo $this->Html->link('My Savings', array('controller'=>'savings', 'action'=>'mysavings',$objLoggedUser->getID()));
+										?>
+									</li>
+									<li>
+										<?php
+											echo $this->Html->link('My Advances', array('controller'=>'advances', 'action'=>'myadvances',$objLoggedUser->getID()));
+										?>
+									</li>
+								</ul>
+							</li>
+							<?php 
+							}
+							if ($isAuthorized) { 
+							?>
 							<li>
 								<?php 
 									echo $this->Html->link('Graphics', array('controller'=>'graphics', 'action'=>'index')); 
@@ -139,6 +168,16 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 										  echo $this->Html->link('Regions', array('controller'=>'regions', 'action'=>'index')); 
 										?>
 									</li>
+									<li>
+										<?php 
+										  echo $this->Html->link('BLOG Categories', array('controller'=>'categories', 'action'=>'index')); 
+										?>
+									</li>
+									<li>
+										<?php 
+										  echo $this->Html->link('Event Types', array('controller'=>'eventtypes', 'action'=>'index')); 
+										?>
+									</li>
 								</ul>
 							</li>
 							<li class="dropdown">
@@ -149,13 +188,18 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 								<ul class="dropdown-menu">
 									<li>
 									<?php 
-										echo $this->Html->link('Applicants', array('controller'=>'applicants', 'action'=>'index')); 
+										echo $this->Html->link('Advances', array('controller'=>'advances', 'action'=>'index')); 
 									?>
 									</li>
 									<li>
 									<?php 
-										echo $this->Html->link('Advances', array('controller'=>'advances', 'action'=>'index')); 
+										echo $this->Html->link('Applicants', array('controller'=>'applicants', 'action'=>'index')); 
 									?>
+									</li>
+									<li>
+										<?php 
+										  echo $this->Html->link('BLOG', array('controller'=>'posts', 'action'=>'index')); 
+										?>
 									</li>
 									<li>
 										<?php 
@@ -181,7 +225,7 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 							</li>
 							<?php } ?>
 							<?php
-							if (Authcomponent::User('role_id') !='7') {						?>
+							if (Authcomponent::User('role_id') !='7') {	?>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 									Sales
@@ -260,8 +304,7 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 						}
 						else 
 						{
-							echo $this->Html->link( $cakeDescription, '/', array('class'=>'navbar-brand')) ;
-
+							echo $this->Html->link( $this->Html->image('logo_inverse.jpg',array('height'=>'30')), '/', array('class'=>'navbar-brand', 'escape'=>false, 'style'=>'margin:-8px')) ;
 						?>
 					</div>
 					<div class="collapse navbar-collapse" id="csimenu">
@@ -287,6 +330,12 @@ $cakeDescription = __d('cake_dev', 'Connect Services');
 			</div>
 		</div>
 		<div id="footer">
+			<div class="navbar-inverse navbar-fixed-bottom" style="height: 30px !important;">
+				<div class="container-fluid text-center" style="max-width: 1200px; color: white">
+					<small><em>© 2009 by Connect Services, Inc.</em></small><br>
+					<span class="pull-right" style="font-size: 8px; margin-bottom: 3px"><em>by Oldemar Vieira</em></span>
+				</div>
+			</div>
 		</div>
 	</div>
 	<?php //echo $this->element('sql_dump'); ?>

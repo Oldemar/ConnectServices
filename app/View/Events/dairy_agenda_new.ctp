@@ -12,17 +12,37 @@
 		<tr>
 			<td colspan='2'>
 				<div class="row">
-					<div class="col-sm-2 col-lg-1 text-center">
+					<div class="col-xs-2 visible-xs">
+					<?php
+						echo $this->Html->link('<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>', 
+							array('action'=>'dairyAgendaNew',date('Y-m-d', strtotime($date . "-1 day"))), 
+							array('class'=>'btn btn-md btn-info aDate','escape'=>false));
+					?>
+					</div>
+					<div class="col-sm-2 col-lg-1 hidden-xs text-center">
 					<?php
 						echo $this->Html->link('Previous', 
 							array('action'=>'dairyAgendaNew',date('Y-m-d', strtotime($date . "-1 day"))), 
 							array('class'=>'btn btn-sm btn-info'));
 					?>
 					</div>
-					<div class="col-sm-8 col-lg-6 text-center">
+					<div class="col-xs-6 col-sm-4 col-lg-6 text-center">
 						<strong><big><?php echo date('F d, Y',strtotime($date)); ?></big></strong>
 					</div>
-					<div class="col-lg-3 hidden-xs hidden-sm text-right form-group" style="margin-bottom: 0">
+					<div class="col-xs-2 visible-xs text-center">
+					<?php
+						echo $this->Html->link('<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>', '#', 
+							array('class'=>'btn btn-md btn-success','id'=>'btnDatePicker','escape'=>false));
+						echo $this->Form->input('aDateHidden', array(
+							'type'=>'text',
+							'class'=>'form-control srcInput aDateHidden',
+							'id'=>'aDate',
+							'label'=>false,
+							'div'=>false
+							));
+					?>
+					</div>
+					<div class="col-sm-4 hidden-xs form-group" style="margin-bottom: 0">
 					<?php
 						echo $this->Form->input('aDate', array(
 							'type'=>'text',
@@ -33,16 +53,20 @@
 							));
 					?>
 					</div>
-					<div class="col-lg-1 hidden-xs hidden-sm text-left form-group">
+					<div class="col-xs-2 visible-xs">
+					<?php
+						echo $this->Html->link('<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>', 
+							array('action'=>'dairyAgendaNew',date('Y-m-d', strtotime($date . "+1 day"))), 
+							array('class'=>'btn btn-md btn-info','escape'=>false));
+					?>
 					</div>
-					<div class="col-sm-2 col-lg-1 text-center">
+					<div class="col-sm-2 col-lg-1 hidden-xs text-center">
 					<?php
 						echo $this->Html->link('Next', 
 							array('action'=>'dairyAgendaNew',date('Y-m-d', strtotime($date . "+1 day"))), 
 							array('class'=>'btn btn-sm btn-info'));
 					?>
 					</div>
-
 				</div>
 			</td>
 		</tr>
@@ -59,7 +83,7 @@
 				$w-=10;
 				$m=$z*10;
 				$dgb = $event['Event']['pinned']?'':' draggable';
-				echo "<div class=\"event ".$dgb."\" data-uid=\"".$event['User']['id']."\" data-eid=\"".$event['Event']['id']."\" style=\"float: left; color: #fff; background-color: ".$event['EventType']['color']."; width: 10%; padding: 3px;\"><p style=\"margin: 0 0 3px; color: white; font-weight: bold;\">".$event['User']['username'].'</p><hr style="margin: 1px"><span style="color: yellow">'.$event['Event']['title']."</span></div>";
+				echo '<div class="event '.$dgb.'" data-uid="'.$event['User']['id'].'" data-eid="'.$event['Event']['id'].'" style="float: left; color: #fff; background-color: '.$event['EventType']['color'].'; width: 20%; padding: 3px;"><p style="margin: 0 0 3px; color: white; font-weight: bold;">'.$event['User']['username'].'</p><hr style="margin: 1px"><span style="color: yellow">'.$event['Event']['title']."</span></div>";
 			}
 			echo '</div></td>';
 		
@@ -79,19 +103,19 @@
 			<div class="modal-body">
 				<?php
 					echo $this->Form2->create('Event');
-					echo $this->Form2->input('EventType', array(
-						'value'=> '6',
-						'readonly'=>'readonly',
-						'class'=>'form-control pull-left',
-						'style'=>'width: 250px',
-						'required'=>'required',
-						'placeholder'=>'This field is required',
-						'label'=>array(
-							'class'=>'pull-left',
-							'style'=>'width: 100px'
-							)));
 					if (in_array($objLoggedUser->getAttr('role_id'), array('2','9')))
 					{
+						echo $this->Form2->input('EventType', array(
+							'class'=>'form-control pull-left',
+							'style'=>'width: 250px',
+							'placeholder'=>'This field is required',
+							'label'=>array(
+								'class'=>'pull-left',
+								'style'=>'width: 100px'
+								)));
+				?>
+				<div style="clear: both"></div>
+				<?php
 						echo $this->Form2->input('user_id', array(
 							'class'=>'form-control pull-left',
 							'style'=>'width: 250px',
@@ -102,6 +126,9 @@
 					}
 					else
 					{
+						echo $this->Form2->input('EventType', array(
+							'type'=>'hidden',
+							'value'=>'6'));
 						echo $this->Form2->input('user_id', array(
 							'type'=>'hidden',
 							'value'=>$objLoggedUser->getID()
@@ -135,7 +162,22 @@
 				?>
 				<div style="clear: both"></div>
 				<?php
-					echo $this->Form2->input('sales_date', array(
+					echo $this->Form2->input('start', array(
+						'type'=>'text',
+						'required'=>'required',
+						'placeholder'=>'This field is required',
+						'id'=>'saleDate',
+						'class'=>'form-control pull-left aData',
+						'style'=>'width: 250px',
+						'value'=>date('Y-m-d'),
+						'label'=>array(
+							'class'=>'pull-left',
+							'style'=>'width: 100px'
+							)));
+				?>
+				<div style="clear: both"></div>
+				<?php
+					echo $this->Form2->input('end', array(
 						'type'=>'text',
 						'required'=>'required',
 						'placeholder'=>'This field is required',
@@ -170,6 +212,9 @@
 	}).change(function(){
 		window.location = $('#aDate').val();
 	});
+	$('#btnDatePicker').click(function() {
+    	$('#aDateHidden').datepicker('show');
+	});
 	$( ".droppable" ).droppable({
 		tolerance: "pointer",
 		drop: function(event, ui) {
@@ -186,7 +231,8 @@
 			})
 		}
 	});
-	$('.eventAdd').on('click', function(){
+	$('.eventAdd, .event').on('click', function(){
+
 		$('#eventModal').modal('show');
 	});
 </script>

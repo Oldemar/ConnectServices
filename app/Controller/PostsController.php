@@ -26,6 +26,51 @@ class PostsController extends AppController {
 	}
 
 /**
+ * blog method
+ *
+ * @return void
+ */
+
+	public function blog($uid = null, $cid = null, $month = null) {
+		$uid   = isset($this->request->query['uid'])   ? $this->request->query['uid']   : null;
+		$cid   = isset($this->request->query['cid'])   ? $this->request->query['cid']   : null;
+    	$month = isset($this->request->query['month']) ? $this->request->query['month'] : null;
+		if ( isset( $cid ) && !is_null( $cid ) ) {
+			$this->set('posts', $this->Post->find('all', array(
+				'conditions'=>array(
+					'Post.category_id'=>$cid),
+				'order'=>array(
+					'Post.created'=>'DESC'))));
+		} elseif ( isset( $month ) && !is_null( $month ) ) {
+			$this->set('posts', $this->Post->find('all', array(
+				'conditions'=>array(
+					'MONTH(Post.created)'=>$month),
+				'order'=>array(
+					'Post.created'=>'DESC'))));
+		} elseif ( isset( $uid ) && !is_null( $uid ) ) {
+			$this->set('posts', $this->Post->find('all', array(
+				'conditions'=>array(
+					'Post.user_id'=>$uid),
+				'order'=>array(
+					'Post.created'=>'DESC'))));
+		} else {
+			$this->set('posts', $this->Post->find('all'));
+		}
+
+		$this->set('postsbycategory', $this->Post->Category->find('all'));
+		$this->set('postsbymonth', $this->Post->find('all', array(
+				'fields'=>'DISTINCT MONTH(Post.created) AS month, COUNT(MONTH(Post.created)) AS total',
+				'group'=>'MONTH(Post.created)',
+				'order'=> array(
+					'MONTH(Post.created)'=> 'DESC'
+				))));		
+		$this->set('recentposts', $this->Post->find('all', array(
+				'order'=>array(
+					'Post.created'=>'DESC'),
+				'limit'=>3)));
+	}
+
+/**
  * view method
  *
  * @throws NotFoundException
@@ -38,6 +83,20 @@ class PostsController extends AppController {
 		}
 		$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
 		$this->set('post', $this->Post->find('first', $options));
+		$this->set('posts', $this->Post->find('all', array(
+			'limit'=>3
+			)));
+		$this->set('postsbycategory', $this->Post->Category->find('all'));
+		$this->set('postsbymonth', $this->Post->find('all', array(
+				'fields'=>'DISTINCT MONTH(Post.created) AS month, COUNT(MONTH(Post.created)) AS total',
+				'group'=>'MONTH(Post.created)',
+				'order'=> array(
+					'MONTH(Post.created)'=> 'DESC'
+				))));		
+		$this->set('recentposts', $this->Post->find('all', array(
+				'order'=>array(
+					'Post.created'=>'DESC'),
+				'limit'=>3)));
 	}
 
 /**
@@ -55,8 +114,14 @@ class PostsController extends AppController {
 				$this->Session->setFlash(__('The post could not be saved. Please, try again.'));
 			}
 		}
-		$users = $this->Post->User->find('list');
-		$this->set(compact('users'));
+		$categories = $this->Post->Category->find('list');
+		$users = $this->Post->User->find('list', array(
+			'conditions'=>array(
+				'NOT'=>array(
+					'User.id'=>array(
+						'1','8','13'
+						)))));
+		$this->set(compact('users','categories'));
 	}
 
 /**
@@ -81,8 +146,14 @@ class PostsController extends AppController {
 			$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
 			$this->request->data = $this->Post->find('first', $options);
 		}
-		$users = $this->Post->User->find('list');
-		$this->set(compact('users'));
+		$categories = $this->Post->Category->find('list');
+		$users = $this->Post->User->find('list', array(
+			'conditions'=>array(
+				'User.id !='=>array(
+					'1','8','13'
+					))));
+		$this->set(compact('users','categories'));
+		$this->set('post',$this->Post->find('first', $options));
 	}
 
 /**

@@ -12,7 +12,8 @@ tr.shown td.details-control {
 }
 
 #container {
-  margin-top: 50px;
+  margin-top: 70px;
+  margin-bottom: 70px
 }
   .event {
     color: #fff;
@@ -107,4 +108,7 @@ tr.shown td.details-control {
   font-size: 12px;
   font-style: italic;
   font-weight: bold;
+}
+.aDateHidden {
+  display: none;
 }

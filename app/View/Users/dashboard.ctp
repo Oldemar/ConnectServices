@@ -2,7 +2,7 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <div class="row">
 	<?php
-	if (!in_array($objLoggedUser->getAttr('role_id'), array('9', '7')))
+	if (!in_array($objLoggedUser->getAttr('role_id'), array('9', '7','13')))
 	{
 	?>
 	<div class="col-xs-12 col-sm-12">
