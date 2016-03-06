@@ -112,10 +112,8 @@
 				'style'=>'width: 250px',
 				'required'=>'required',
 				'placeholder'=>'This field is required',
-				'label'=>array(
-					'class'=>'pull-left',
-					'style'=>'width: 100px'
-					)));
+				'label'=>false
+				));
 		?>
 		<div style="clear: both"></div>
 		<?php 
